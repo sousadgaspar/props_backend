@@ -1,12 +1,17 @@
 import "reflect-metadata";
-const express = require('express');
-const {v4: uuidv4} = require('uuid');
+import {createConnection, Connection} from "typeorm";
 
+//database connection
+const connection = await createConnection();
+//Server configuration
+const express = require('express');
 const app = express();
 app.use(express.json());
 
-//App routes
+//assets
+const {v4: uuidv4} = require('uuid');
 
+//App routes
 app.get('/', (request, response) => {
     response.send("This is the home page");
 })
@@ -146,8 +151,8 @@ app.post('/api/message', (request, response) => {
         ocasionId: request.body.ocasionId,
         instructions: request.body.instructions,
         price: request.body.price,
-        createdAt: Date('d-m-Y H:i:s'),
-        updatedAt: Date('d-m-Y H:i:s'),
+        createdAt: Date(),
+        updatedAt: Date(),
     });
 });
 

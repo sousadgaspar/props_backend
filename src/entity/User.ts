@@ -1,10 +1,10 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
 
 @Entity()
-export class User {
+export class User extends BaseEntity{
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
     @Column()
     firstName: string;
@@ -13,6 +13,26 @@ export class User {
     lastName: string;
 
     @Column()
-    age: number;
+    email: string;
 
+    @Column()
+    password: string;
+
+    @Column()
+    birthDate: Date;
+
+    @Column()
+    isActive: boolean;
+
+    @Column()
+    api_token: string;
+
+    @Column()
+    session_token: string;
+
+    @Column()
+    created_at: Date;
+
+    @Column()
+    updated_at: Date; 
 }
