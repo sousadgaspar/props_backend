@@ -10,6 +10,7 @@ import { messageController } from "./src/controllers/MessageController";
 import { ocasionController } from "./src/controllers/OcasionController";
 import { subcategoryController } from "./src/controllers/SubcategoryController";
 import { transactionController } from "./src/controllers/TransactionController";
+import { paymentGatewayController } from "./src/controllers/PaymentGatewayController";
 
 createConnection();
 
@@ -110,6 +111,8 @@ app.delete('/api/celebrity/subcategory', subcategoryController.delete);
 app.delete('/api/celebrity/subcategory', subcategoryController.softDelete);
 
 
+//PaymentGateway
+app.get('/api/paymentgateway/emis/generatepaymentreference', paymentGatewayController.generatePaymentReference)
 
 
 app.listen(3000, () => {console.log("listening on port 3000...")});

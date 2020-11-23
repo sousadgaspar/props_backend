@@ -1,30 +1,42 @@
-import {Column, CreateDateColumn, DeleteDateColumn, Double, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Double, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 
 @Entity()
-export class Message {
+export class Message extends BaseEntity {
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
-    userId: number;
+    @Column("varchar", {length: 512})
+    userId: string;
+
+    @Column("varchar", {length: 512})
+    celebrityId: string;
+
+    @Column("varchar", {length: 512})
+    ocasionId: string;
+
+    @Column({
+        nullable: true
+    })
+    from: string;
 
     @Column()
-    celebrityId: number;
-
-    @Column()
-    ocasionId: number;
+    to: string;
 
     @Column()
     instructions: string;
 
     @Column()
-    price: Double;
+    price: number;
 
-    @Column()
+    @Column({
+        default: 'pending'
+    })
     status: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     video: string;
 
     @CreateDateColumn()
