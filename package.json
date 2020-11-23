@@ -6,6 +6,7 @@
    "author": "Waau LTD",
    "license": "ISC",
    "dependencies": {
+      "bcrypt": "^5.0.0",
       "env": "0.0.2",
       "express": "^4.17.1",
       "mysql": "^2.14.1",

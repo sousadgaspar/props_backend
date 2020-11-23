@@ -1,8 +1,18 @@
 import "reflect-metadata";
-import {createConnection, Connection} from "typeorm";
+import {createConnection, getConnection, getRepository, Connection} from "typeorm";
+import {Request, Response} from 'express';
 
-//database connection
-const connection = await createConnection();
+createConnection();
+
+//get the entities
+import {userController} from './src/controllers/UserController';
+
+import { User } from "./src/entity/User";
+import { Category } from './src/entity/Category';
+let category = new Category();
+import { Subcategory } from './src/entity/Subcategory';
+let user = new User();
+
 //Server configuration
 const express = require('express');
 const app = express();
@@ -10,6 +20,7 @@ app.use(express.json());
 
 //assets
 const {v4: uuidv4} = require('uuid');
+const bcrypt = require('bcrypt');
 
 //App routes
 app.get('/', (request, response) => {
@@ -23,59 +34,11 @@ app.get('/', (request, response) => {
 /*********************************************************/
 //User routes
 
-//create
-app.post('/api/user', (request, response) => {
-    //validate the data
-    //save to the database
-    //and send the saved data to the client
-
-    response.send({
-        id: uuidv4(),
-        avatar: request.body.avatar,
-        firstName: request.body.firstName,
-        lastName: request.body.lastName,
-        email: request.body.email,
-        password: request.body.password
-    });
-});
-//index
-app.get('/api/users', (request, response) => {
-
-    //query the database for all users paginated by some amount of users
-    response.send([   
-        {id: uuidv4(), firstName: 'Sousa', email: 'sousadgapar@gmail.com', password: uuidv4()},
-        {id: uuidv4(), firstName: 'Dumilda', email: 'dumilda@gmail.com', password: uuidv4()},
-        {id: uuidv4(), firstName: 'Yorsenia', email: 'yorsenia@gmail.com', password: uuidv4()},
-        {id: uuidv4(), firstName: 'Nuelsanio', email: 'nuelsanio@gmail.com', password: uuidv4()},
-        {id: uuidv4(), firstName: 'Suzana', email: 'suzana@gmail.com', password: uuidv4()},
-        {id: uuidv4(), firstName: 'Zurema', email: 'zurema@gmail.com', password: uuidv4()}
-    ])
-});
-
-//show
-app.get('/api/user/:id', (request, response) => {
-    //Query a user by the Id
-    response.send("This is the data of unidque user " + request.params.id);
-});
-
-//update
-app.put('/api/user/:id', (request, response) => {
-    //get the user with the :id from the database
-    //update the fields
-    //save 
-    response.send({
-        id: request.params.id,
-        firstName: request.body.firstName,
-        lastName: request.body.lastName,
-        email: request.body.email,
-        password: request.body.password
-    });
-});
-
-//delete (softdelete)
-app.delete('/api/user/:id/delete', (request, response) => {
-    response.send(`The user ${request.params.id} was successfully deleted`);
-});
+app.post('/api/user', userController.create);
+app.get('/api/users', userController.index);
+app.get('/api/user/:id', userController.show);
+app.put('/api/user/:id', userController.update);
+app.delete('/api/user/:id/delete', userController.delete);
 
 //celebrity routes
 //create
@@ -363,34 +326,72 @@ app.get('/api/transactions', (request, response) => {
         perPage: request.query.perPage,
         pages: 3,//ceil(count(allregisters)/perPage)
         //some more metadata
-        data: [
-            {
-                id: uuidv4(),
-                name: 'carregamento',
-                value: 3000,
-                messagePrice: 500,
-                creditBefore: 3000,
-                creditAfter: 2500,
-                userId: 3,
-                accountId: 5,
-                celebrityId: 3,
-                messageId: 49,
-            },
-            {
-                id: uuidv4(),
-                name: 'carregamento',
-                value: 3000,
-                messagePrice: 500,
-                creditBefore: 3000,
-                creditAfter: 2500,
-                userId: 3,
-                accountId: 5,
-                celebrityId: 3,
-                messageId: 49,
-            }
-        ]
     });
 })
+
+
+app.post('/api/category', async (request, response) => {
+    let categoryRepository = getRepository(Category);
+
+    category.name = request.body.name;
+    category.description = request.body.description;
+
+    await categoryRepository.save(category)
+        .then(value => {
+            response.status(200).send(value);
+        })
+        .catch(error => {
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            })
+        });
+});
+
+app.get('/api/categories', async (request, response) => {
+
+    await getRepository(Category).find(category)
+        .then( fectchedCategories => {
+            console.log(fectchedCategories);
+            response.status(200).send(fectchedCategories);
+        })
+        .catch(error => {
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            })
+        });
+
+})
+
+
+app.post('/api/celebrity/subcategory', async (request, response) => {
+    let subcategoryRepository = getRepository(Subcategory);
+    let subcategory = new Subcategory();
+    subcategory.name = request.body.name;
+    subcategory.categoryId = request.body.categoryId;
+    subcategory.description = request.body.description;
+
+    await subcategoryRepository.save(subcategory)
+        .then( value => {
+            response.status(200).send(value);
+        })
+        .catch(error => {
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            })
+        });
+});
 
 
 app.listen(3000, () => {console.log("listening on port 3000...")});

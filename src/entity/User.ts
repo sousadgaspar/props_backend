@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Column, BaseEntity} from "typeorm";
 
 @Entity()
 export class User extends BaseEntity{
@@ -9,30 +9,50 @@ export class User extends BaseEntity{
     @Column()
     firstName: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     lastName: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
+    avatar: string;
+
+    @Column({
+        unique: true
+    })
     email: string;
 
     @Column()
     password: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     birthDate: Date;
 
-    @Column()
+    @Column({
+        default: true
+    })
     isActive: boolean;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     api_token: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     session_token: string;
 
-    @Column()
+    @CreateDateColumn()
     created_at: Date;
 
-    @Column()
+    @UpdateDateColumn()
     updated_at: Date; 
+
+    @DeleteDateColumn()
+    deleted_at: Date; 
 }
