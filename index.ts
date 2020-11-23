@@ -1,26 +1,20 @@
 import "reflect-metadata";
-import {createConnection, getConnection, getRepository, Connection} from "typeorm";
-import {Request, Response} from 'express';
+import {createConnection, getRepository} from "typeorm";
+import { celebrityController } from "./src/controllers/CelebrityController";
 
 createConnection();
 
 //get the entities
 import {userController} from './src/controllers/UserController';
 
-import { User } from "./src/entity/User";
 import { Category } from './src/entity/Category';
 let category = new Category();
 import { Subcategory } from './src/entity/Subcategory';
-let user = new User();
 
 //Server configuration
 const express = require('express');
 const app = express();
 app.use(express.json());
-
-//assets
-const {v4: uuidv4} = require('uuid');
-const bcrypt = require('bcrypt');
 
 //App routes
 app.get('/', (request, response) => {
@@ -42,21 +36,7 @@ app.delete('/api/user/:id/delete', userController.delete);
 
 //celebrity routes
 //create
-app.post('/api/celebrity', (request, response) => {
-    response.send({
-        id: uuidv4(),
-        avatar: request.body.avatar,
-        firstName: request.body.firstName,
-        lastName: request.body.lastName,
-        email: request.body.email,
-        password: request.body.password,
-        categoryId: request.body.cateroryId,
-        subcategoryId: request.body.subcategoryId,
-        description: request.body.description,
-        messageResponseTime: request.body.messageResponseTime,
-        messagePrice: request.body.messagePrice,
-    });
-});
+app.post('/api/celebrity', celebrityController.create);
 
 //show
 app.get('/api/celebrity/:id', (request, response) => {
@@ -93,8 +73,6 @@ app.post('/api/celebrity/library/item', (request, response) => {
     //save photo or video with the celebrity ID
 
     response.send({
-        id: uuidv4(),
-        artistId: uuidv4(),
         item: request.body.item,
         type: request.body.type
     })
@@ -106,7 +84,6 @@ app.post('/api/message', (request, response) => {
     //validate the message data
     //store in the database
     response.send({
-        id: uuidv4(),
         userId: request.body.userId,
         from: request.body.from,
         to: request.body.to,
@@ -123,7 +100,6 @@ app.post('/api/message', (request, response) => {
 app.get('/api/message/:id', (request, response) => {
     //find the message correspondent to the passed id
     response.send({
-        id: uuidv4(),
         instructions: "Hi, Me and Dumilda are very fans of yours. Unfortunatelly I betrayed her. Please, record a message telling her I love her so much, and I never going to meet any other woman again.",
         createdAt: Date(),
         updatedAt: Date(),
@@ -160,7 +136,6 @@ app.post('/api/ocasion', (request, response) => {
     //validate the request data
     //store in the database
     response.send({
-        id: uuidv4(),
         name: request.body.name,
         description: request.body.description
     }); 
@@ -202,7 +177,6 @@ app.post('/api/account', (request, response) => {
     //validate the request data
     //store the validated data
     response.send({
-        id: uuidv4(),
         credit: 0,
         bankName: request.body.bankName,
         bankAccountNumber: request.body.bankAccountNumber,
@@ -288,7 +262,6 @@ app.post('/api/transaction', (request, response) => {
     //validate the data
     //create the transaction
     response.send({
-        id: uuidv4(),
         name: 'carregamento',
         value: 3000,
         messagePrice: 500,

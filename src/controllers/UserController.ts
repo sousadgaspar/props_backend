@@ -110,6 +110,23 @@ class UserController {
                 password: request.body.password
             });
     }
+
+    async delete(request: Request, response: Request) {
+        let userRepository = getRepository(User);
+        await userRepository.delete({id: request.params.id})
+            .then(value => {
+                response.status(200).send(value);
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                });
+            })
+    }
 }
 
 
