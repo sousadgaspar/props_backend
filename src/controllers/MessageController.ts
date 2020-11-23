@@ -13,11 +13,21 @@ class MessageController {
     }
 
     async show(request: Request, response: Response) {
-        
+        response.send({
+            instructions: "Hi, Me and Dumilda are very fans of yours. Unfortunatelly I betrayed her. Please, record a message telling her I love her so much, and I never going to meet any other woman again.",
+            createdAt: Date(),
+            updatedAt: Date(),
+        })
     }
 
     async update(request: Request, response: Response) {
-        
+        response.send({
+            id: request.params.id,
+            from: request.body.from,
+            to: request.body.to,
+            ocasionId: request.body.ocasionId,
+            instructions: request.body.instructions,
+        });
     }
 
     async delete(request: Request, response: Response) {

@@ -127,6 +127,15 @@ class UserController {
                 });
             })
     }
+
+    async softDelete(request: Request, response: Response) {
+        response.status(200).send(
+            {
+                id: request.params.id,
+                result: 'success'
+            }
+        )
+    }
 }
 
 
