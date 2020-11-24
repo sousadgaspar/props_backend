@@ -77,11 +77,11 @@ app.delete('/api/ocasion/:id', ocasionController.softDelete);
 
 //Account
 app.post('/api/account', accountController.create);
-app.get('/api/account', accountController.index);
-app.get('/api/account', accountController.show);
-app.put('/api/account', accountController.update);
-app.delete('/api/account', accountController.delete);
-app.delete('/api/account', accountController.softDelete);
+app.get('/api/accounts', accountController.index);
+app.get('/api/account/:id', accountController.show);
+app.put('/api/account/:id', accountController.update);
+app.delete('/api/account/:id/delete', accountController.delete);
+app.delete('/api/account/:id', accountController.softDelete);
 app.put('/api/account/:id/credit', accountController.credit);
 app.put('/api/account/:id/debit', accountController.debit);
 
