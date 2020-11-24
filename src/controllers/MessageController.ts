@@ -82,21 +82,97 @@ class MessageController {
     }
 
     async update(request: Request, response: Response) {
-        response.send({
-            id: request.params.id,
-            from: request.body.from,
-            to: request.body.to,
-            ocasionId: request.body.ocasionId,
-            instructions: request.body.instructions,
-        });
+        let message = new Message();
+        let messageRepository = getRepository(Message);
+
+        await messageRepository.findOne({id: request.params.id})
+            .then(async foundMessage => {
+                foundMessage.from = request.body.from;
+                foundMessage.to = request.body.to;
+                foundMessage.status = request.body.status;
+                foundMessage.instructions = request.body.instructions;
+                foundMessage.ocasionId = request.body.ocasionId;
+                foundMessage.video = request.body.video;
+                
+                await messageRepository.save(foundMessage)
+                    .then(savedMessage => {
+                        response.status(200).send(savedMessage);
+                    })
+                    .catch(error => {
+                        response.status(500).send({
+                            errorName: error.name,
+                            errorMessage: error.message,
+                            errorNumber: error.errno,
+                            errorCode: error.code,
+                            sqlMessage: error.sqlMessage,
+                        });
+                    })
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                });
+            })
     }
 
     async delete(request: Request, response: Response) {
-        
+        let messageRepository = getRepository(Message);
+        await messageRepository.delete({id: request.params.id})
+            .then(result => {
+                response.status(200).send(result);
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                });
+            })
     }
 
     async softDelete(request: Request, response: Response) {
-        
+        let messageRepository = getRepository(Message);
+        await messageRepository.softDelete({id: request.params.id})
+            .then(result => {
+                response.status(200).send(result);
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                });
+            })
+    }
+
+    async changeStatus(request: Request, response: Response) {
+        let messageRepository = getRepository(Message);
+        await messageRepository.findOne({id: request.params.id})
+            .then(async foundMessage => {
+                foundMessage.status = request.body.status;
+
+                await messageRepository.save(foundMessage)
+                    .then(savedMessage => {
+                        response.status(200).send(savedMessage.status);
+                    })
+                    .catch(error => {
+                        response.status(500).send({
+                            errorName: error.name,
+                            errorMessage: error.message,
+                            errorNumber: error.errno,
+                            errorCode: error.code,
+                            sqlMessage: error.sqlMessage,
+                        });  
+                    })
+            })
     }
 
 }

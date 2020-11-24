@@ -36,7 +36,7 @@ app.get('/api/users', userController.index);
 app.get('/api/user/:id', userController.show);
 app.put('/api/user/:id', userController.update);
 app.delete('/api/user/:id/delete', userController.delete);
-app.put('/api/user/:id/delete', userController.softDelete);
+app.put('/api/user/:id', userController.softDelete);
 
 //celebrity routes
 app.post('/api/celebrity', celebrityController.create);
@@ -44,7 +44,7 @@ app.get('/api/celebrities', celebrityController.index);
 app.get('/api/celebrity/:id', celebrityController.show);
 app.put('/api/celebrity/:id', celebrityController.update);
 app.delete('/api/celebrity/:id/delete', celebrityController.delete);
-app.put('/api/celebrity/:id/delete', celebrityController.softDelete);
+app.put('/api/celebrity/:id', celebrityController.softDelete);
 
 
 //Celebrity library
@@ -53,7 +53,7 @@ app.get('/api/library/items', libraryItemController.index);
 app.get('/api/library/item/:id', libraryItemController.show);
 app.put('/api/library/item/:id', libraryItemController.update);
 app.delete('/api/library/item/:id/delete', libraryItemController.delete);
-app.delete('/api/library/item/:id/delete', libraryItemController.softDelete);
+app.delete('/api/library/item/:id', libraryItemController.softDelete);
 
 
 //Message routes
@@ -61,8 +61,9 @@ app.post('/api/message', messageController.create);
 app.get('/api/messages', messageController.index);
 app.get('/api/message/:id', messageController.show);
 app.put('/api/message/:id', messageController.update);
+app.put('/api/changestatus/message/:id', messageController.changeStatus);
 app.delete('/api/message/:id/delete', messageController.delete);
-app.delete('/api/message/:id/delete', messageController.softDelete);
+app.delete('/api/message/:id', messageController.softDelete);
 
 
 //Ocasions routes
@@ -72,7 +73,7 @@ app.get('/api/ocasions', ocasionController.index);
 app.get('/api/ocasion/:id', ocasionController.show);
 app.put('/api/ocasion/:id', ocasionController.update);
 app.delete('/api/ocasion/:id/delete', ocasionController.delete);
-app.delete('/api/ocasion/:id/delete', ocasionController.softDelete);
+app.delete('/api/ocasion/:id', ocasionController.softDelete);
 
 //Account
 app.post('/api/account', accountController.create);

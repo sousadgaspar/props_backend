@@ -12,4 +12,3 @@ class PaymentGatewayController {
 }
 
 export let paymentGatewayController = new PaymentGatewayController();
-
