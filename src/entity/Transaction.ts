@@ -1,4 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+const moment = require('moment');
+let dueDate = moment().add(3, 'days').format();
 
 @Entity()
 export class Transaction {
@@ -27,12 +29,27 @@ export class Transaction {
     @Column()
     EMISPaymentReference: string;
 
-    @Column()
+    @Column({
+        default: 'pending'
+    })
     EMISPaymentReferenceStatus: string;
 
-    @Column()
+    @Column({
+        default: dueDate
+    })
     EMISPaymentRefenrenceDueDate: Date;
 
-    @Column()
+    @Column({
+        default: false
+    })
     isComplete: boolean;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @DeleteDateColumn()
+    deletedAt: Date;
 }

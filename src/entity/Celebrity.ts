@@ -6,9 +6,7 @@ export class Celebrity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({
-        nullable: true
-    })
+    @Column()
     firstName: string;
 
     @Column({
@@ -16,7 +14,9 @@ export class Celebrity extends BaseEntity {
     })
     lastName: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     nickName: string;
 
     @Column({

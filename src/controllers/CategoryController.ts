@@ -44,19 +44,117 @@ class CategoryController {
     }
 
     async show(request: Request, response: Response) {
-        
+        let categoryRepository = getRepository(Category);
+
+        await categoryRepository.findOne({id: request.params.id})
+            .then(foundCategory => {
+                response.status(200).send(foundCategory);
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            })
     }
 
     async update(request: Request, response: Response) {
-        
+        let categoryRepository = getRepository(Category);
+        await categoryRepository.findOne({id: request.params.id})
+            .then(async foundCategory => {
+                if(foundCategory === undefined) {
+                    response.status(404).send({
+                        error: true,
+                        message: 'recurso não encontrado.'
+                    })
+                }
+
+                foundCategory.name = request.body.name;
+                foundCategory.description = request.body.description;
+
+                await categoryRepository.save(foundCategory)
+                    .then(updatedCategory => {
+                        response.status(200).send(updatedCategory);
+                    })
+                    .catch(error => {
+                        response.status(500).send({
+                            errorName: error.name,
+                            errorMessage: error.message,
+                            errorNumber: error.errno,
+                            errorCode: error.code,
+                            sqlMessage: error.sqlMessage,
+                        })
+                    })
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            })
     }
 
     async delete(request: Request, response: Response) {
         
+        let categoryRepository = getRepository(Category);
+        await categoryRepository.delete({id: request.params.id})
+            .then(result => {
+                if(result.affected > 0) {
+                    response.status(200).send({
+                        error: false,
+                        message: {"affectedRows": result.affected}
+                    })
+                } else {
+                    response.status(404).send({
+                        error: true,
+                        message: {"affectedRows": result.affected}
+                    })
+                }
+                
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            });
     }
 
     async softDelete(request: Request, response: Response) {
-        
+        let categoryRepository = getRepository(Category);
+        await categoryRepository.softDelete({id: request.params.id})
+            .then(result => {
+                if(result.raw.affectedRows > 0) {
+                    response.status(200).send({
+                        error: false,
+                        message: {"affectedRows": result.affected}
+                    })
+                } else {
+                    response.status(404).send({
+                        error: false,
+                        message: 'category not found'
+                    })
+                }
+                
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            });
     }
 
 }

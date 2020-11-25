@@ -88,12 +88,11 @@ app.put('/api/account/:id/debit', accountController.debit);
 
 //Transaction
 app.post('/api/transaction', transactionController.create);
-app.get('/api/transaction', transactionController.index);
-app.get('/api/transaction', transactionController.show);
-app.put('/api/transaction', transactionController.update);
-app.delete('/api/transaction', transactionController.delete);
-app.delete('/api/transaction', transactionController.softDelete);
-
+app.get('/api/transactions', transactionController.index);
+app.get('/api/transaction/:id', transactionController.show);
+app.put('/api/transaction/:id', transactionController.update);
+app.delete('/api/transaction/:id/delete', transactionController.delete);
+app.delete('/api/transaction/:id', transactionController.softDelete);
 
 //Category
 app.post('/api/category', categoryController.create);
@@ -101,16 +100,15 @@ app.get('/api/categories', categoryController.index);
 app.get('/api/category/:id', categoryController.show);
 app.put('/api/category/:id', categoryController.update);
 app.delete('/api/category/:id/delete', categoryController.delete);
-app.delete('/api/category/:id/delete', categoryController.softDelete);
+app.delete('/api/category/:id', categoryController.softDelete);
 
 //Subcategory
-app.post('/api/celebrity/subcategory', subcategoryController.create);
-app.get('/api/celebrity/subcategory', subcategoryController.index);
-app.get('/api/celebrity/subcategory', subcategoryController.show);
-app.put('/api/celebrity/subcategory', subcategoryController.update);
-app.delete('/api/celebrity/subcategory', subcategoryController.delete);
-app.delete('/api/celebrity/subcategory', subcategoryController.softDelete);
-
+app.post('/api/subcategory', subcategoryController.create);
+app.get('/api/subcategories/:id', subcategoryController.index);
+app.get('/api/subcategory/:id', subcategoryController.show);
+app.put('/api/subcategory/update/:id', subcategoryController.update);
+app.delete('/api/subcategory/:id/delete', subcategoryController.delete);
+app.delete('/api/subcategory/:id', subcategoryController.softDelete);
 
 //PaymentGateway
 app.get('/api/paymentgateway/emis/generatepaymentreference', paymentGatewayController.generatePaymentReference)
