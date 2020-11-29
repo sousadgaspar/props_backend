@@ -1,19 +1,28 @@
-import {getRepository} from 'typeorm';
+import {BaseEntity, getRepository} from 'typeorm';
 import {Request, Response} from 'express';
+import {validationResult} from 'express-validator';
 import {User} from '../entity/User';
 
-class UserController {
+class UserController extends BaseEntity{
 
     async create(request: Request, response: Response) {
+            //Collect data from the request
             let user = new User();
-            //save to the database
             user.firstName = request.body.firstName;
             user.lastName = request.body.lastName;
             user.avatar = request.body.avatar;
             user.email = request.body.email;
             user.password = request.body.password;
             user.birthDate = request.body.birthDate;
-        
+
+            //validate the request
+            const errors = validationResult(request);
+
+            if(!errors.isEmpty()) {
+                return response.status(400).json({errors: errors.array()});
+            }
+
+
             let userRepository = getRepository(User);
         
             await userRepository.save(user)
@@ -54,6 +63,14 @@ class UserController {
 
     async show(request: Request, response: Response) {
         let userRepository = getRepository(User);
+
+        //validate the request
+        const errors = validationResult(request);
+
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors.array()})
+        }
+
         await userRepository.findOne({id: request.params.id}).then( value => {
             response.status(200).send(value);
         })
@@ -71,6 +88,14 @@ class UserController {
 
     async update(request: Request, response: Response) {
         let userRepository = getRepository(User);
+
+        //validate the request
+        const errors = validationResult(request);
+
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors.array()})
+        }
+
         await userRepository.findOne({id: request.params.id})
             .then(async foundUser => {
                 foundUser.firstName = request.body.firstName;
@@ -112,10 +137,18 @@ class UserController {
     }
 
     async delete(request: Request, response: Request) {
+
+        //validate the request
+        const errors = validationResult(request);
+
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors.array()})
+        }
+
         let userRepository = getRepository(User);
         await userRepository.delete({id: request.params.id})
-            .then(value => {
-                response.status(200).send(value);
+            .then(result => {
+                response.status(200).send(result);
             })
             .catch(error => {
                 response.status(500).send({
@@ -129,12 +162,27 @@ class UserController {
     }
 
     async softDelete(request: Request, response: Response) {
-        response.status(200).send(
-            {
-                id: request.params.id,
-                result: 'success'
-            }
-        )
+        //validate the request
+        const errors = validationResult(request);
+
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors.array()})
+        }
+
+        let userRepository = getRepository(User);
+        await userRepository.softDelete({id: request.params.id})
+            .then(result => {
+                response.status(200).send(result);
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                });
+            })
     }
 }
 

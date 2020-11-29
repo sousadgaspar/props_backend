@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 
+//import controllers
 import {userController} from './src/controllers/UserController';
 import { accountController } from "./src/controllers/AccountController";
 import { categoryController } from "./src/controllers/CategoryController";
@@ -12,13 +13,16 @@ import { subcategoryController } from "./src/controllers/SubcategoryController";
 import { transactionController } from "./src/controllers/TransactionController";
 import { paymentGatewayController } from "./src/controllers/PaymentGatewayController";
 
-createConnection();
+//import validators 
+import { userValidator } from "./src/controllers/validators/UserValidator";
 
+createConnection();
 
 //Setup the server
 const express = require('express');
 const app = express();
 app.use(express.json());
+//app.use(expressValidator());
 
 //App routes
 app.get('/', (request, response) => {
@@ -31,12 +35,12 @@ app.get('/', (request, response) => {
 /*********************************************************/
 //User routes
 
-app.post('/api/user', userController.create);
+app.post('/api/user', userValidator.validate('create'), userController.create);
 app.get('/api/users', userController.index);
-app.get('/api/user/:id', userController.show);
-app.put('/api/user/:id', userController.update);
-app.delete('/api/user/:id/delete', userController.delete);
-app.put('/api/user/:id', userController.softDelete);
+app.get('/api/user/:id', userValidator.validate('show'), userController.show);
+app.put('/api/user/:id', userValidator.validate('update'), userController.update);
+app.delete('/api/user/:id/delete', userValidator.validate('delete'), userController.delete);
+app.put('/api/user/:id', userValidator.validate('softDelete'), userController.softDelete);
 
 //celebrity routes
 app.post('/api/celebrity', celebrityController.create);
