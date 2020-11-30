@@ -15,6 +15,7 @@ import { paymentGatewayController } from "./src/controllers/PaymentGatewayContro
 
 //import validators 
 import { userValidator } from "./src/controllers/validators/UserValidator";
+import { celebrityValidator } from './src/controllers/validators/celebrityValidator';
 
 createConnection();
 
@@ -43,7 +44,7 @@ app.delete('/api/user/:id/delete', userValidator.validate('delete'), userControl
 app.put('/api/user/:id', userValidator.validate('softDelete'), userController.softDelete);
 
 //celebrity routes
-app.post('/api/celebrity', celebrityController.create);
+app.post('/api/celebrity', celebrityValidator.validate('create'), celebrityController.create);
 app.get('/api/celebrities', celebrityController.index);
 app.get('/api/celebrity/:id', celebrityController.show);
 app.put('/api/celebrity/:id', celebrityController.update);
