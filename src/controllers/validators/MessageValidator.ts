@@ -25,8 +25,12 @@ class MessageValidator {
             ]; break;
             case 'update': return [
                 param('id', 'A referência do ID que passou não existe').isUUID(),
-                body('from'),
-                body('to'),
+                body('from', 'O campo De: não pode estar vazio').notEmpty(),
+                body('from', 'Escreva o nome no formato correcto').escape(),
+                body('to', 'O campo Para: não pode estar vazio').notEmpty(),
+                body('to', 'Escreva o nome no formato correcto').escape(),
+                body('instructions', 'O campo instruções não pode estar vazio').notEmpty(),
+                body('instructions', 'Escreva as instruções no formato correcto').escape(),
                 body('instructions'),
             ]; break;
             case 'delete': return [
