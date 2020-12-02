@@ -41,15 +41,15 @@ app.get('/api/users', userController.index);
 app.get('/api/user/:id', userValidator.validate('show'), userController.show);
 app.put('/api/user/:id', userValidator.validate('update'), userController.update);
 app.delete('/api/user/:id/delete', userValidator.validate('delete'), userController.delete);
-app.put('/api/user/:id', userValidator.validate('softDelete'), userController.softDelete);
+app.delete('/api/user/:id', userValidator.validate('softDelete'), userController.softDelete);
 
 //celebrity routes
 app.post('/api/celebrity', celebrityValidator.validate('create'), celebrityController.create);
 app.get('/api/celebrities', celebrityController.index);
-app.get('/api/celebrity/:id', celebrityController.show);
-app.put('/api/celebrity/:id', celebrityController.update);
-app.delete('/api/celebrity/:id/delete', celebrityController.delete);
-app.put('/api/celebrity/:id', celebrityController.softDelete);
+app.get('/api/celebrity/:id', celebrityValidator.validate('show'), celebrityController.show);
+app.put('/api/celebrity/:id', celebrityValidator.validate('update'), celebrityController.update);
+app.delete('/api/celebrity/:id/delete', celebrityValidator.validate('delete'), celebrityController.delete);
+app.delete('/api/celebrity/:id', celebrityValidator.validate('softDelete'), celebrityController.softDelete);
 
 
 //Celebrity library

@@ -1,13 +1,20 @@
 import {getRepository} from 'typeorm';
 import {Request, Response} from 'express';
 import {Celebrity} from '../entity/Celebrity';
+import { validationResult } from 'express-validator';
 
 class CelebrityController { 
 
     async create(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors.array()});
+        }
+
         let celebrity = new Celebrity();
         let celebrityRepository = getRepository(Celebrity);
-
         celebrity.firstName = request.body.firstName;
         celebrity.lastName = request.body.lastName;
         celebrity.nickName = request.body.nickName;
@@ -37,8 +44,10 @@ class CelebrityController {
     }
 
     async index(request: Request, response: Response) {
+        
         let celebrity = new Celebrity();
         let celebrityRepository = getRepository(Celebrity);
+
         await celebrityRepository.find(celebrity)
             .then(value => {
                 response.status(200).send(value);
@@ -55,8 +64,14 @@ class CelebrityController {
     }
 
     async show(request: Request, response: Response) {
-        let celebrityRepository = getRepository(Celebrity);
+        
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+            return response.status(400).json({errors: errors.array()})
+        }
 
+        let celebrityRepository = getRepository(Celebrity);
         await celebrityRepository.findOne({id: request.params.id})
             .then(value => {
                 response.status(200).send(value);
@@ -73,9 +88,13 @@ class CelebrityController {
     }
 
     async update(request: Request, response: Response) {
-        let celebrity = new Celebrity();
-        let celebrityRepository = getRepository(Celebrity);
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+            return response.status(400).send({errors: errors.array()})
+        }
 
+        let celebrityRepository = getRepository(Celebrity);
         await celebrityRepository.findOne({id: request.params.id})
             .then(async foundCelebrity => {
                 foundCelebrity.firstName = request.body.firstName;
@@ -108,9 +127,14 @@ class CelebrityController {
     }
 
     async delete(request: Request, response: Response) {
-        let celebrity = new Celebrity();
-        let celebrityRepository = getRepository(Celebrity);
 
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+           return response.status(400).json({errors: errors.array()})
+        }
+
+        let celebrityRepository = getRepository(Celebrity);
         await celebrityRepository.delete({id: request.params.id})
             .then(result => {
                 response.status(200).send(result);
@@ -127,8 +151,14 @@ class CelebrityController {
     }
 
     async softDelete(request: Request, response: Response) {
-        let celebrityRepository = getRepository(Celebrity);
 
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+            return response.status(400).json({errors: errors.array()})
+        }
+
+        let celebrityRepository = getRepository(Celebrity);
         await celebrityRepository.softDelete({id: request.params.id})
             .then(result => {
                 response.status(200).send(result);
