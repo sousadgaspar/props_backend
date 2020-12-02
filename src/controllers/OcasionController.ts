@@ -1,10 +1,17 @@
 import {getRepository} from 'typeorm';
 import {Request, Response} from 'express';
 import {Ocasion} from '../entity/Ocasion';
+import {validationResult} from 'express-validator';
 
 class OcasionController { 
 
     async create(request: Request, response: Response) {
+
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let ocasion = new Ocasion();
         ocasion.name = request.body.name;
         ocasion.description = request.body.description;
@@ -45,8 +52,13 @@ class OcasionController {
     }
 
     async show(request: Request, response: Response) {
-        let ocasionRepository = getRepository(Ocasion);
 
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
+        let ocasionRepository = getRepository(Ocasion);
         await ocasionRepository.findOne({id: request.params.id})
             .then(foundOcasion => {
                 response.status(200).send(foundOcasion);
@@ -63,7 +75,12 @@ class OcasionController {
     }
 
     async update(request: Request, response: Response) {
-        let ocasion = new Ocasion();
+
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let ocasionRepository = getRepository(Ocasion)
         await ocasionRepository.findOne({id: request.params.id})
             .then(async foundOcasion => {
@@ -89,8 +106,13 @@ class OcasionController {
     }
 
     async delete(request: Request, response: Response) {
+        
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+        
         let ocasionRepository = getRepository(Ocasion);
-
         await ocasionRepository.delete({id: request.params.id})
             .then(result => {
                 response.status(200).send(result)
@@ -107,8 +129,13 @@ class OcasionController {
     }
 
     async softDelete(request: Request, response: Response) {
+        
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+        
         let ocasionRepository = getRepository(Ocasion);
-
         await ocasionRepository.softDelete({id: request.params.id})
             .then(result => {
                 response.status(200).send(result)

@@ -1,5 +1,7 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
+import {categoryValidator} from './src/controllers/validators/CategoryValidator';
+import {ocasionValidator} from './src/controllers/validators/OcasionValidator';
 
 //import controllers
 import {userController} from './src/controllers/UserController';
@@ -74,12 +76,12 @@ app.delete('/api/message/:id', messageValidator.validate('softDelete'), messageC
 
 //Ocasions routes
 //create
-app.post('/api/ocasion', ocasionController.create);
+app.post('/api/ocasion', ocasionValidator.validate('create'), ocasionController.create);
 app.get('/api/ocasions', ocasionController.index);
-app.get('/api/ocasion/:id', ocasionController.show);
-app.put('/api/ocasion/:id', ocasionController.update);
-app.delete('/api/ocasion/:id/delete', ocasionController.delete);
-app.delete('/api/ocasion/:id', ocasionController.softDelete);
+app.get('/api/ocasion/:id', ocasionValidator.validate('show'), ocasionController.show);
+app.put('/api/ocasion/:id', ocasionValidator.validate('update'), ocasionController.update);
+app.delete('/api/ocasion/:id/delete', ocasionValidator.validate('delete'), ocasionController.delete);
+app.delete('/api/ocasion/:id', ocasionValidator.validate('softDelete'), ocasionController.softDelete);
 
 //Account
 app.post('/api/account', accountController.create);
@@ -101,12 +103,12 @@ app.delete('/api/transaction/:id/delete', transactionController.delete);
 app.delete('/api/transaction/:id', transactionController.softDelete);
 
 //Category
-app.post('/api/category', categoryController.create);
+app.post('/api/category', categoryValidator.validate('create'), categoryController.create);
 app.get('/api/categories', categoryController.index);
-app.get('/api/category/:id', categoryController.show);
-app.put('/api/category/:id', categoryController.update);
-app.delete('/api/category/:id/delete', categoryController.delete);
-app.delete('/api/category/:id', categoryController.softDelete);
+app.get('/api/category/:id', categoryValidator.validate('show'), categoryController.show);
+app.put('/api/category/:id', categoryValidator.validate('update'), categoryController.update);
+app.delete('/api/category/:id/delete', categoryValidator.validate('delete'), categoryController.delete);
+app.delete('/api/category/:id', categoryValidator.validate('softDelete'), categoryController.softDelete);
 
 //Subcategory
 app.post('/api/subcategory', subcategoryController.create);

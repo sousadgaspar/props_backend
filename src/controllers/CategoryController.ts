@@ -1,10 +1,18 @@
 import {getRepository} from 'typeorm';
 import {Request, Response} from 'express';
 import {Category} from '../entity/Category';
+import { validationResult } from 'express-validator';
 
 class CategoryController { 
 
     async create(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).send(errors);
+        }
+
         let category = new Category();
         let categoryRepository = getRepository(Category);
         category.name = request.body.name;
@@ -26,6 +34,7 @@ class CategoryController {
     }
 
     async index(request: Request, response: Response) {
+
         let category = new Category();
         await getRepository(Category).find(category)
         .then( fectchedCategories => {
@@ -44,6 +53,13 @@ class CategoryController {
     }
 
     async show(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).send(errors);
+        }
+
         let categoryRepository = getRepository(Category);
 
         await categoryRepository.findOne({id: request.params.id})
@@ -62,6 +78,13 @@ class CategoryController {
     }
 
     async update(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).send(errors);
+        }
+
         let categoryRepository = getRepository(Category);
         await categoryRepository.findOne({id: request.params.id})
             .then(async foundCategory => {
@@ -102,6 +125,12 @@ class CategoryController {
 
     async delete(request: Request, response: Response) {
         
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).send(errors);
+        }
+
         let categoryRepository = getRepository(Category);
         await categoryRepository.delete({id: request.params.id})
             .then(result => {
@@ -130,6 +159,13 @@ class CategoryController {
     }
 
     async softDelete(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).send(errors);
+        }
+
         let categoryRepository = getRepository(Category);
         await categoryRepository.softDelete({id: request.params.id})
             .then(result => {
