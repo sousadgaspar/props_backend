@@ -2,10 +2,18 @@ import {getRepository} from 'typeorm';
 import {Request, Response} from 'express';
 import {Message} from '../entity/Message';
 import {Celebrity} from '../entity/Celebrity';
+import { validationResult } from 'express-validator';
 
 class MessageController { 
 
     async create(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+            return response.status(400).json({errors: errors});
+        }
+
         let message = new Message();
         let messageRepository = getRepository(Message);
         let celebrityRepository = getRepository(Celebrity);
@@ -63,7 +71,13 @@ class MessageController {
     }
 
     async show(request: Request, response: Response) {
-        let message = new Message();
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+            return response.status(400).json({errors: errors});
+        }
+
         let messageRepository = getRepository(Message);
 
         await messageRepository.findOne({id: request.params.id})
@@ -82,9 +96,14 @@ class MessageController {
     }
 
     async update(request: Request, response: Response) {
-        let message = new Message();
-        let messageRepository = getRepository(Message);
 
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+            return response.status(400).json({errors: errors});
+        }
+
+        let messageRepository = getRepository(Message);
         await messageRepository.findOne({id: request.params.id})
             .then(async foundMessage => {
                 foundMessage.from = request.body.from;
@@ -120,6 +139,13 @@ class MessageController {
     }
 
     async delete(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+            return response.status(400).json({errors: errors});
+        }
+
         let messageRepository = getRepository(Message);
         await messageRepository.delete({id: request.params.id})
             .then(result => {
@@ -137,6 +163,13 @@ class MessageController {
     }
 
     async softDelete(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()){
+            return response.status(400).json({errors: errors});
+        }
+
         let messageRepository = getRepository(Message);
         await messageRepository.softDelete({id: request.params.id})
             .then(result => {

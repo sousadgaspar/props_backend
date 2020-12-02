@@ -16,6 +16,7 @@ import { paymentGatewayController } from "./src/controllers/PaymentGatewayContro
 //import validators 
 import { userValidator } from "./src/controllers/validators/UserValidator";
 import { celebrityValidator } from './src/controllers/validators/celebrityValidator';
+import { messageValidator } from './src/controllers/validators/MessageValidator';
 
 createConnection();
 
@@ -62,13 +63,13 @@ app.delete('/api/library/item/:id', libraryItemController.softDelete);
 
 
 //Message routes
-app.post('/api/message', messageController.create);
+app.post('/api/message', messageValidator.validate('create'), messageController.create);
 app.get('/api/messages', messageController.index);
-app.get('/api/message/:id', messageController.show);
-app.put('/api/message/:id', messageController.update);
+app.get('/api/message/:id', messageValidator.validate('show'), messageController.show);
+app.put('/api/message/:id', messageValidator.validate('update'), messageController.update);
 app.put('/api/changestatus/message/:id', messageController.changeStatus);
-app.delete('/api/message/:id/delete', messageController.delete);
-app.delete('/api/message/:id', messageController.softDelete);
+app.delete('/api/message/:id/delete', messageValidator.validate('delete'), messageController.delete);
+app.delete('/api/message/:id', messageValidator.validate('softDelete'), messageController.softDelete);
 
 
 //Ocasions routes
