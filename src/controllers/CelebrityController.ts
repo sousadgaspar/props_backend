@@ -27,6 +27,7 @@ class CelebrityController {
         celebrity.messagePrice = request.body.messagePrice;
         celebrity.messagePriceCurrency = request.body.messagePriceCurrency;
         celebrity.messageResponseTime = request.body.messageResponseTime;
+        celebrity.telephoneNumber = request.body.telephoneNumber;
 
         await celebrityRepository.save(celebrity)
             .then(value => {

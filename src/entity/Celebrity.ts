@@ -24,8 +24,13 @@ export class Celebrity extends BaseEntity {
     })
     avatar: string;
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     email: string;
+
+    @Column()
+    telephoneNumber: string;
 
     @Column({
         nullable: true

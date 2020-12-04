@@ -16,6 +16,7 @@ class CelebrityValidator {
                     body('password', 'Escreva o e-mail no formato correcto').escape().trim(),
                     body('description', 'Parece que há caracteres que não são texto simples').escape().trim(),
                     body('messageResponseTime', 'O campo tempo deve ser somente números inteiros').isInt().trim(),
+                    body('telephoneNumber', 'Escreva o número de telefone no formato correcto').escape().trim(),
                     body('messagePrice', 'Escreva o preço no formato correcto').isCurrency().trim(),
                 ]; break;
             case 'show': 

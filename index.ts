@@ -20,6 +20,7 @@ import { messageValidator } from './src/controllers/validators/MessageValidator'
 import {categoryValidator} from './src/controllers/validators/CategoryValidator';
 import {ocasionValidator} from './src/controllers/validators/OcasionValidator';
 import {accountValidator} from './src/controllers/validators/AccountValidator';
+import {subcategoryValidator} from './src/controllers/validators/SubcategoryValidator';
 
 createConnection();
 
@@ -103,12 +104,12 @@ app.delete('/api/category/:id/delete', categoryValidator.validate('delete'), cat
 app.delete('/api/category/:id', categoryValidator.validate('softDelete'), categoryController.softDelete);
 
 //Subcategory
-app.post('/api/subcategory', subcategoryController.create);
+app.post('/api/subcategory', subcategoryValidator.validate('create'), subcategoryController.create);
 app.get('/api/subcategories/:id', subcategoryController.index);
-app.get('/api/subcategory/:id', subcategoryController.show);
-app.put('/api/subcategory/update/:id', subcategoryController.update);
-app.delete('/api/subcategory/:id/delete', subcategoryController.delete);
-app.delete('/api/subcategory/:id', subcategoryController.softDelete);
+app.get('/api/subcategory/:id', subcategoryValidator.validate('show'), subcategoryController.show);
+app.put('/api/subcategory/update/:id', subcategoryValidator.validate('update'), subcategoryController.update);
+app.delete('/api/subcategory/:id/delete', subcategoryValidator.validate('delete'), subcategoryController.delete);
+app.delete('/api/subcategory/:id', subcategoryValidator.validate('softDelete'), subcategoryController.softDelete);
 
 //PaymentGateway
 app.get('/api/paymentgateway/emis/generatepaymentreference', paymentGatewayController.generatePaymentReference);

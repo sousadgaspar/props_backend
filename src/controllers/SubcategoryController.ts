@@ -1,10 +1,18 @@
 import {getRepository} from 'typeorm';
 import {Request, Response} from 'express';
 import {Subcategory} from '../entity/Subcategory';
+import {validationResult} from 'express-validator';
 
 class SubcategoryController { 
 
     async create(request: Request, response: Response) {
+        
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+        
         let subcategory = new Subcategory();
         let subcategoryRepository = getRepository(Subcategory);
         subcategory.name = request.body.name;
@@ -28,13 +36,18 @@ class SubcategoryController {
     }
 
     async index(request: Request, response: Response) {
-        let subcategory = new Subcategory();
-        let subcategoryRepository = getRepository(Subcategory);
 
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
+        let subcategoryRepository = getRepository(Subcategory);
         await subcategoryRepository.find({categoryId: request.params.id})
             .then(foundSubcategories => {
                 if(foundSubcategories.length < 1){
-                    response.status(404).send({
+                    return response.status(404).send({
                         'message': 'no registers found'
                     })
                 }
@@ -52,7 +65,13 @@ class SubcategoryController {
     }
 
     async show(request: Request, response: Response) {
-        let subcategory = new Subcategory();
+        
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+        
         let subcategoryRepository = getRepository(Subcategory);
 
         await subcategoryRepository.findOne({id: request.params.id})
@@ -77,9 +96,14 @@ class SubcategoryController {
     }
 
     async update(request: Request, response: Response) {
-        let subcategory = new Subcategory();
-        let subcategoryRepository = getRepository(Subcategory);
 
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
+        let subcategoryRepository = getRepository(Subcategory);
         await subcategoryRepository.findOne({id: request.params.id})
             .then(async foundSubcategory => {
                 if(foundSubcategory === undefined) {
@@ -110,6 +134,13 @@ class SubcategoryController {
     }
 
     async delete(request: Request, response: Response) {
+
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let subcategoryRepository = getRepository(Subcategory);
         await subcategoryRepository.delete({id: request.params.id})
             .then(result => {
@@ -132,6 +163,13 @@ class SubcategoryController {
     }
 
     async softDelete(request: Request, response: Response) {
+
+        //validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let subcategoryRepository = getRepository(Subcategory);
         await subcategoryRepository.softDelete({id: request.params.id})
             .then(result => {
