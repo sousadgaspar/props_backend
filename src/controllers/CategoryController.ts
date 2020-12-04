@@ -17,6 +17,7 @@ class CategoryController {
         let categoryRepository = getRepository(Category);
         category.name = request.body.name;
         category.description = request.body.description;
+        category.image = request.body.image;
 
         await categoryRepository.save(category)
             .then(value => {

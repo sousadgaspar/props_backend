@@ -15,6 +15,9 @@ export class Category extends BaseEntity {
     @Column()
     description: string;
 
+    @Column()
+    image: string;
+
     @CreateDateColumn()
     createdAt: Date;
 

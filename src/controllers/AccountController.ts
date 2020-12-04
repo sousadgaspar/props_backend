@@ -2,10 +2,18 @@ import {getRepository, PrimaryColumn} from 'typeorm';
 import {Request, Response} from 'express';
 import {Account} from '../entity/Account';
 import { Ocasion } from '../entity/Ocasion';
+import {validationResult} from 'express-validator';
 
 class AccountController { 
 
     async create(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let account = new Account();
         account.bankName = request.body.bankName;
         account.bankAccountNumber = request.body.bankAccountNumber;
@@ -30,6 +38,7 @@ class AccountController {
     }
 
     async index(request: Request, response: Response) {
+
         let account = new Account();
         let accountRepository = getRepository(Account);
         await accountRepository.find(account)
@@ -49,7 +58,13 @@ class AccountController {
     }
 
     async show(request: Request, response: Response) {
-        let account = new Account();
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let accountRepository = getRepository(Account);
         await accountRepository.findOne({id: request.params.id})
             .then(foundedAccount => {
@@ -67,6 +82,13 @@ class AccountController {
     }
 
     async update(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let accountRepository = getRepository(Account);
         await accountRepository.findOne({id: request.params.id})
             .then(async foundAccount => {
@@ -98,6 +120,13 @@ class AccountController {
     }
 
     async delete(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let accountRepository = getRepository(Account);
         await accountRepository.delete({id: request.params.id})
             .then(result =>{
@@ -115,6 +144,13 @@ class AccountController {
     }
 
     async softDelete(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let accountRepository = getRepository(Account);
         await accountRepository.softDelete({id: request.params.id})
             .then(result =>{
@@ -132,6 +168,13 @@ class AccountController {
     }
 
     async credit(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let accountRepository = getRepository(Account);
         await accountRepository.findOne({id: request.params.id})
             .then(async foundAccount => {
@@ -161,6 +204,13 @@ class AccountController {
     }
 
     async debit (request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let accountRepository = getRepository(Account);
         await accountRepository.findOne({id: request.params.id})
             .then(async foundAccount => {

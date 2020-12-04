@@ -14,17 +14,15 @@ class UserController extends BaseEntity{
             user.email = request.body.email;
             user.password = request.body.password;
             user.birthDate = request.body.birthDate;
+            user.telephoneNumber = request.body.telephoneNumber;
 
             //validate the request
             const errors = validationResult(request);
-
             if(!errors.isEmpty()) {
                 return response.status(400).json({errors: errors.array()});
             }
 
-
             let userRepository = getRepository(User);
-        
             await userRepository.save(user)
                 .then((value) => {
                     response.status(200).send(value)
@@ -103,6 +101,7 @@ class UserController extends BaseEntity{
                 foundUser.avatar = request.body.avatar;
                 foundUser.password = request.body.password;
                 foundUser.birthDate = request.body.birthDate;
+                foundUser.telephoneNumber = request.body.telephoneNumber;
 
                 await userRepository.save(foundUser)
                     .then( savedUser => {

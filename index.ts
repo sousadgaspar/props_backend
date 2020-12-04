@@ -1,7 +1,5 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
-import {categoryValidator} from './src/controllers/validators/CategoryValidator';
-import {ocasionValidator} from './src/controllers/validators/OcasionValidator';
 
 //import controllers
 import {userController} from './src/controllers/UserController';
@@ -19,6 +17,9 @@ import { paymentGatewayController } from "./src/controllers/PaymentGatewayContro
 import { userValidator } from "./src/controllers/validators/UserValidator";
 import { celebrityValidator } from './src/controllers/validators/celebrityValidator';
 import { messageValidator } from './src/controllers/validators/MessageValidator';
+import {categoryValidator} from './src/controllers/validators/CategoryValidator';
+import {ocasionValidator} from './src/controllers/validators/OcasionValidator';
+import {accountValidator} from './src/controllers/validators/AccountValidator';
 
 createConnection();
 
@@ -55,15 +56,6 @@ app.delete('/api/celebrity/:id/delete', celebrityValidator.validate('delete'), c
 app.delete('/api/celebrity/:id', celebrityValidator.validate('softDelete'), celebrityController.softDelete);
 
 
-//Celebrity library
-app.post('/api/library/item', libraryItemController.create);
-app.get('/api/library/items', libraryItemController.index);
-app.get('/api/library/item/:id', libraryItemController.show);
-app.put('/api/library/item/:id', libraryItemController.update);
-app.delete('/api/library/item/:id/delete', libraryItemController.delete);
-app.delete('/api/library/item/:id', libraryItemController.softDelete);
-
-
 //Message routes
 app.post('/api/message', messageValidator.validate('create'), messageController.create);
 app.get('/api/messages', messageController.index);
@@ -84,14 +76,14 @@ app.delete('/api/ocasion/:id/delete', ocasionValidator.validate('delete'), ocasi
 app.delete('/api/ocasion/:id', ocasionValidator.validate('softDelete'), ocasionController.softDelete);
 
 //Account
-app.post('/api/account', accountController.create);
+app.post('/api/account', accountValidator.validate('create'), accountController.create);
 app.get('/api/accounts', accountController.index);
-app.get('/api/account/:id', accountController.show);
-app.put('/api/account/:id', accountController.update);
-app.delete('/api/account/:id/delete', accountController.delete);
-app.delete('/api/account/:id', accountController.softDelete);
-app.put('/api/account/:id/credit', accountController.credit);
-app.put('/api/account/:id/debit', accountController.debit);
+app.get('/api/account/:id', accountValidator.validate('show'), accountController.show);
+app.put('/api/account/:id', accountValidator.validate('update'), accountController.update);
+app.delete('/api/account/:id/delete', accountValidator.validate('delete'), accountController.delete);
+app.delete('/api/account/:id', accountValidator.validate('softDelete'), accountController.softDelete);
+app.put('/api/account/:id/credit', accountValidator.validate('credit'), accountController.credit);
+app.put('/api/account/:id/debit', accountValidator.validate('debit'), accountController.debit);
 
 
 //Transaction
@@ -119,7 +111,15 @@ app.delete('/api/subcategory/:id/delete', subcategoryController.delete);
 app.delete('/api/subcategory/:id', subcategoryController.softDelete);
 
 //PaymentGateway
-app.get('/api/paymentgateway/emis/generatepaymentreference', paymentGatewayController.generatePaymentReference)
+app.get('/api/paymentgateway/emis/generatepaymentreference', paymentGatewayController.generatePaymentReference);
+
+//Celebrity library
+app.post('/api/library/item', libraryItemController.create);
+app.get('/api/library/items', libraryItemController.index);
+app.get('/api/library/item/:id', libraryItemController.show);
+app.put('/api/library/item/:id', libraryItemController.update);
+app.delete('/api/library/item/:id/delete', libraryItemController.delete);
+app.delete('/api/library/item/:id', libraryItemController.softDelete);
 
 
 app.listen(3000, () => {console.log("listening on port 3000...")});

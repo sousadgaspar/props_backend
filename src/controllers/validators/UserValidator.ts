@@ -32,6 +32,7 @@ class UserValidator{
                 body('password', 'O campo senha é obrigatório').notEmpty(),
                 body('email', 'Escreva um e-mail no formato correcto').isEmail(),
                 body('email', 'O campo e-mail é obrigatório').notEmpty(),
+                body('telephoneNumber', 'O campo telefone é obrigatório').notEmpty(),
                 body('avatar').trim(),
             ]; break;
 

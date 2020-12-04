@@ -10,6 +10,7 @@ class SubcategoryController {
         subcategory.name = request.body.name;
         subcategory.categoryId = request.body.categoryId;
         subcategory.description = request.body.description;
+        subcategory.image = request.body.image;
     
         await subcategoryRepository.save(subcategory)
             .then( value => {

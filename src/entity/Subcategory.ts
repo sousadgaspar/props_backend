@@ -16,6 +16,9 @@ export class Subcategory extends BaseEntity {
     description: string;
 
     @Column()
+    image: string;
+
+    @Column()
     categoryId: string;
 
     @CreateDateColumn()

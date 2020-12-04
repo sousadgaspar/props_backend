@@ -14,6 +14,9 @@ export class Ocasion {
     })
     description: string;
 
+    @Column()
+    image: string;
+
     @CreateDateColumn()
     createdAt: Date;
 

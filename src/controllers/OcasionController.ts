@@ -15,6 +15,7 @@ class OcasionController {
         let ocasion = new Ocasion();
         ocasion.name = request.body.name;
         ocasion.description = request.body.description;
+        ocasion.image = request.body.image;
 
         let ocasionRepository = getRepository(Ocasion);
         await ocasionRepository.save(ocasion)

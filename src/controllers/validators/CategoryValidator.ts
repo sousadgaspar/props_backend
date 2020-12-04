@@ -9,6 +9,7 @@ class CategoryValidator {
                 body('name').trim().escape(),
                 body('description', 'O campo descrição não pode estar vazio').notEmpty(),
                 body('description').trim().escape(),
+                body('image').trim().escape(),
             ]; break;
             case 'show': return [
                 param('id', 'A referência do ID que passou não existe').isUUID()
