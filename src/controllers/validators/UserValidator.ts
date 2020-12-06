@@ -34,6 +34,7 @@ class UserValidator{
                 body('email', 'O campo e-mail é obrigatório').notEmpty(),
                 body('telephoneNumber', 'O campo telefone é obrigatório').notEmpty(),
                 body('avatar').trim(),
+                body('gender').trim().escape(),
             ]; break;
 
             case 'delete': 
