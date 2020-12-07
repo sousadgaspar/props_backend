@@ -24,6 +24,7 @@ class MessageController {
         message.from = request.body.from;
         message.to = request.body.to;
         message.instructions = request.body.instructions;
+        message.isPublic = request.body.isPublic;
 
         //find the message price from the celebrity profile
         await celebrityRepository.findOne({id: request.body.celebrityId})

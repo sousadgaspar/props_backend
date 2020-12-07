@@ -15,6 +15,7 @@ class UserController extends BaseEntity{
             user.password = request.body.password;
             user.birthDate = request.body.birthDate;
             user.telephoneNumber = request.body.telephoneNumber;
+            user.gender = request.body.gender;
 
             //validate the request
             const errors = validationResult(request);
@@ -60,15 +61,14 @@ class UserController extends BaseEntity{
 
 
     async show(request: Request, response: Response) {
-        let userRepository = getRepository(User);
-
+        
         //validate the request
         const errors = validationResult(request);
-
         if(!errors.isEmpty()) {
             return response.status(400).json({errors: errors.array()})
         }
 
+        let userRepository = getRepository(User);
         await userRepository.findOne({id: request.params.id}).then( value => {
             response.status(200).send(value);
         })

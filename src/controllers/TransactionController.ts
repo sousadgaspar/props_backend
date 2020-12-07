@@ -2,11 +2,19 @@ import {getRepository, getConnection} from 'typeorm';
 import {Request, Response} from 'express';
 import {Transaction} from '../entity/Transaction';
 import {Account} from '../entity/Account';
+import {validationResult} from 'express-validator';
 
 
 class TransactionController { 
 
     async create(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let transaction = new Transaction();
         transaction.type = request.body.type;
         transaction.accountId = request.body.accountId;
@@ -45,9 +53,15 @@ class TransactionController {
     }
 
     async index(request: Request, response: Response) {
+        
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+        
         let transaction = new Transaction();
         let transactionRepository = getRepository(Transaction);
-
         await transactionRepository.find(transaction)
             .then(foundTransactions => {
                 response.status(200).send(foundTransactions);
@@ -64,6 +78,13 @@ class TransactionController {
     }
 
     async show(request: Request, response: Response) {
+
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
+
         let transactionRepository = getRepository(Transaction);
         await transactionRepository.findOne({id: request.params.id})
             .then(foundTransaction => {
@@ -81,9 +102,14 @@ class TransactionController {
     }
 
     async update(request: Request, response: Response) {
-        let transaction = new Transaction();
-        let transactionRepository = getRepository(Transaction);
+        
+        //Validate the request
+        const errors = validationResult(request);
+        if(!errors.isEmpty()) {
+            return response.status(400).json({errors: errors});
+        }
 
+        let transactionRepository = getRepository(Transaction);
         await transactionRepository.findOne({id: request.params.id})
             .then(async foundTransaction => {
 
@@ -117,11 +143,11 @@ class TransactionController {
     }
 
     async delete(request: Request, response: Response) {
-        
+        //Transactions can't be delete in practice   
     }
 
     async softDelete(request: Request, response: Response) {
-        
+        //Transactions can't be delete in practice
     }
 
 }

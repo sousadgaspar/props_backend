@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Entity, BaseEntity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Category } from './Category';
 
 
 @Entity()
@@ -18,8 +19,9 @@ export class Subcategory extends BaseEntity {
     @Column()
     image: string;
 
-    @Column()
-    categoryId: string;
+    @ManyToOne(() => Category, category => category.subcategories)
+    @JoinColumn()
+    category: Category;
 
     @CreateDateColumn()
     createdAt: Date;

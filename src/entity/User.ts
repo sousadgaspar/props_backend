@@ -1,4 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Column, BaseEntity} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Column, BaseEntity, OneToOne, JoinColumn, OneToMany} from "typeorm";
+import {Account} from './Account';
+import {Message} from './Message';
 
 @Entity()
 export class User extends BaseEntity{
@@ -17,7 +19,22 @@ export class User extends BaseEntity{
     @Column({
         nullable: true
     })
+    nickName: string;
+
+    @Column({
+        nullable: true
+    })
     avatar: string;
+
+    @Column({
+        nullable: true
+    })
+    gender: string;
+
+    @Column({
+        nullable: true
+    })
+    description: string;
 
     @Column({
         unique: true
@@ -51,6 +68,14 @@ export class User extends BaseEntity{
         nullable: true
     })
     session_token: string;
+
+    @OneToOne(() => Account, account => account.userId, {eager: true, cascade: true})
+    @JoinColumn()
+    account: Account;
+
+    @OneToMany(() => Message, message => message.userId, {eager: true, cascade: true})
+    @JoinColumn()
+    messages: Message[]
 
     @CreateDateColumn()
     created_at: Date;

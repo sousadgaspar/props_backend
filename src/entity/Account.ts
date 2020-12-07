@@ -1,4 +1,6 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BaseEntity, Double} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BaseEntity, Double, OneToMany, JoinColumn} from "typeorm";
+import { JoinAttribute } from "typeorm/query-builder/JoinAttribute";
+import { Transaction } from "./Transaction";
 
 //contribute to the typeOrm lib adding the default fields created_at, updated_at and PrimaryGeneratedColumn
 @Entity()
@@ -27,6 +29,9 @@ export class Account extends BaseEntity {
     @Column({nullable: true})
     celebrityId: string;
 
+    @OneToMany(() => Transaction, transaction => transaction.accountId, {eager: true, cascade: true})
+    @JoinColumn()
+    transactions: Transaction[] 
 
     @CreateDateColumn()
     createdAt: Date;

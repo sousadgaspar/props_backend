@@ -1,4 +1,6 @@
-import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Double, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Double, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import { Celebrity } from "./Celebrity";
+import { Ocasion } from "./Ocasion";
 
 @Entity()
 export class Message extends BaseEntity {
@@ -35,9 +37,22 @@ export class Message extends BaseEntity {
     status: string;
 
     @Column({
+        default: false
+    })
+    isPublic: boolean;
+
+    @Column({
         nullable: true
     })
     video: string;
+
+    @ManyToOne(() => Celebrity, celebrity => celebrity.messages)
+    @JoinColumn()
+    celebrity: Celebrity;
+
+    @OneToOne(() => Ocasion)
+    @JoinColumn()
+    ocasion: Ocasion; 
 
     @CreateDateColumn()
     createdAt: Date;

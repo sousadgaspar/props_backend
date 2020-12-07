@@ -1,4 +1,7 @@
-import {Entity, PrimaryGeneratedColumn, BaseEntity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, BaseEntity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToMany, JoinTable, OneToMany} from "typeorm";
+import { User } from "./User";
+import { Category } from './Category';
+import { Message } from "./Message";
 
 @Entity()
 export class Celebrity extends BaseEntity {
@@ -6,52 +9,22 @@ export class Celebrity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
-    firstName: string;
+    @OneToOne(() => User)
+    @JoinColumn()
+    user: User;
 
-    @Column({
-        nullable: true
-    })
-    lastName: string;
-
-    @Column({
-        nullable: true
-    })
-    nickName: string;
-
-    @Column({
-        nullable: true
-    })
-    avatar: string;
-
-    @Column({
-        nullable: true
-    })
-    email: string;
-
-    @Column()
-    telephoneNumber: string;
-
-    @Column({
-        nullable: true
-    })
-    password: string;
-
-    @Column()
-    categoryId: string;
-
-    @Column()
-    subcategoryId: string;
-
-    @Column({
-        nullable: true
-    })
-    description: string;
+    @ManyToMany(() => Category)
+    @JoinTable()
+    categories: Category[];
 
     @Column({
         default: 3
     })
     messageResponseTime: number;
+
+    @OneToMany(() => Message, message => message.celebrityId)
+    @JoinColumn()
+    messages: Message[];
 
     @Column()
     messagePrice: number;
