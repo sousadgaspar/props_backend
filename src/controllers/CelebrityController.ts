@@ -1,7 +1,10 @@
 import {getRepository} from 'typeorm';
 import {Request, Response} from 'express';
 import {Celebrity} from '../entity/Celebrity';
+import {Category} from '../entity/Category';
 import { validationResult } from 'express-validator';
+import { Subcategory } from '../entity/Subcategory';
+import { isMaster } from 'cluster';
 
 class CelebrityController { 
 
@@ -15,19 +18,53 @@ class CelebrityController {
 
         let celebrity = new Celebrity();
         let celebrityRepository = getRepository(Celebrity);
-        celebrity.firstName = request.body.firstName;
-        celebrity.lastName = request.body.lastName;
-        celebrity.nickName = request.body.nickName;
-        celebrity.avatar = request.body.avatar;
-        celebrity.categoryId = request.body.categoryId;
-        celebrity.subcategoryId = request.body.subcategoryId;
-        celebrity.description = request.body.description;
-        celebrity.email = request.body.email;
-        celebrity.password = request.body.password;
+        let categoryRepository = getRepository(Category);
+        let subcategoryRepository = getRepository(Subcategory);
+        celebrity.user.firstName = request.body.firstName;
+        celebrity.user.lastName = request.body.lastName;
+        celebrity.user.nickName = request.body.nickName;
+        celebrity.user.avatar = request.body.avatar;
+
+        let returnedCategory = Object();
+        await categoryRepository.findOne({id: request.body.categoryId})
+            .then(category => {
+                returnedCategory = category;
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            })
+
+        let returnedSubcategory = Object();
+        await subcategoryRepository.findOne({id: request.body.categoryId})
+            .then(Subcategory => {
+                returnedSubcategory = Subcategory;
+            })
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            })
+
+            returnedCategory.subcategories = [returnedSubcategory];
+
+        celebrity.categories = [returnedCategory];
+        celebrity.user.description = request.body.description;
+        celebrity.user.email = request.body.email;
+        celebrity.user.password = request.body.password;
         celebrity.messagePrice = request.body.messagePrice;
         celebrity.messagePriceCurrency = request.body.messagePriceCurrency;
         celebrity.messageResponseTime = request.body.messageResponseTime;
-        celebrity.telephoneNumber = request.body.telephoneNumber;
+        celebrity.user.telephoneNumber = request.body.telephoneNumber;
 
         await celebrityRepository.save(celebrity)
             .then(value => {
@@ -96,16 +133,50 @@ class CelebrityController {
         }
 
         let celebrityRepository = getRepository(Celebrity);
+        let categoryRepository = getRepository(Category);
+        let subcategoryRepository = getRepository(Subcategory);
+
         await celebrityRepository.findOne({id: request.params.id})
             .then(async foundCelebrity => {
-                foundCelebrity.firstName = request.body.firstName;
-                foundCelebrity.lastName = request.body.lastName;
-                foundCelebrity.nickName = request.body.nickName;
-                foundCelebrity.avatar = request.body.avatar;
-                foundCelebrity.password = request.body.password;
-                foundCelebrity.categoryId = request.body.categoryId;
-                foundCelebrity.subcategoryId = request.body.subcategoryId;
-                foundCelebrity.description = request.body.description;
+                foundCelebrity.user.firstName = request.body.firstName;
+                foundCelebrity.user.lastName = request.body.lastName;
+                foundCelebrity.user.nickName = request.body.nickName;
+                foundCelebrity.user.avatar = request.body.avatar;
+                foundCelebrity.user.password = request.body.password;
+
+                if( typeof request.body.categoryId !== undefined) {
+                    let foundCategory = Object();
+                    await categoryRepository.findOne({id: request.body.categoryId})
+                        .then(category => foundCategory = category)
+                        .catch(error => {
+                            response.status(500).send({
+                                errorName: error.name,
+                                errorMessage: error.message,
+                                errorNumber: error.errno,
+                                errorCode: error.code,
+                                sqlMessage: error.sqlMessage,
+                            })
+                        });
+
+                    let foundSubcategory = Object();
+                    await subcategoryRepository.findOne({id: request.body.subcategoryId})
+                        .then(subcategory => foundSubcategory = subcategory)
+                        .catch(error => {
+                            response.status(500).send({
+                                errorName: error.name,
+                                errorMessage: error.message,
+                                errorNumber: error.errno,
+                                errorCode: error.code,
+                                sqlMessage: error.sqlMessage,
+                            })
+                        });
+
+
+                    foundCategory.subcategories = [foundSubcategory];
+                    foundCelebrity.categories = foundCategory;
+                }
+
+                foundCelebrity.user.description = request.body.description;
                 foundCelebrity.messageResponseTime = request.body.messageResponseTime;
                 foundCelebrity.messagePrice = request.body.messagePrice;
                 foundCelebrity.messagePriceCurrency = request.body.messagePriceCurrency;

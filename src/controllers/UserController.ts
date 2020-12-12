@@ -1,7 +1,8 @@
-import {BaseEntity, getRepository} from 'typeorm';
+import {BaseEntity, getRepository, getManager} from 'typeorm';
 import {Request, Response} from 'express';
 import {validationResult} from 'express-validator';
 import {User} from '../entity/User';
+import {Account} from '../entity/Account';
 
 class UserController extends BaseEntity{
 
@@ -23,20 +24,31 @@ class UserController extends BaseEntity{
                 return response.status(400).json({errors: errors.array()});
             }
 
-            let userRepository = getRepository(User);
-            await userRepository.save(user)
-                .then((value) => {
-                    response.status(200).send(value)
-                })
-                .catch(error => {
-                    response.status(500).send({
-                        errorName: error.name,
-                        errorMessage: error.message,
-                        errorNumber: error.errno,
-                        errorCode: error.code,
-                        sqlMessage: error.sqlMessage,
+            //start a transaction in the database
+            await getManager().transaction(async transactionEntityManager => {
+                //create a new account for the user
+                user.account = new Account;
+
+                //save the user
+                await transactionEntityManager.save(user)
+                    .then((value) => {
+                        response.status(200).send(value)
                     })
-                });
+                    .catch(error => {
+                        response.status(500).send({
+                            // errorName: error.name,
+                            // errorMessage: error.message,
+                            // errorNumber: error.errno,
+                            // errorCode: error.code,
+                            // sqlMessage: error.sqlMessage,
+                            error
+                        })
+                    });
+
+            })
+
+
+
     }
 
 
@@ -50,11 +62,12 @@ class UserController extends BaseEntity{
         })
         .catch(error => {
             response.status(500).send({
-                errorName: error.name,
-                errorMessage: error.message,
-                errorNumber: error.errno,
-                errorCode: error.code,
-                sqlMessage: error.sqlMessage,
+                // errorName: error.name,
+                // errorMessage: error.message,
+                // errorNumber: error.errno,
+                // errorCode: error.code,
+                // sqlMessage: error.sqlMessage,
+                error
             });
         });
     }

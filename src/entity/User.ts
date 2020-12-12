@@ -69,7 +69,7 @@ export class User extends BaseEntity{
     })
     session_token: string;
 
-    @OneToOne(() => Account, account => account.userId, {eager: true, cascade: true})
+    @OneToOne(() => Account, {eager: true, cascade: true})
     @JoinColumn()
     account: Account;
 

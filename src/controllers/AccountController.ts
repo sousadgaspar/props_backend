@@ -18,8 +18,6 @@ class AccountController {
         account.bankName = request.body.bankName;
         account.bankAccountNumber = request.body.bankAccountNumber;
         account.bankAccountIBAN = request.body.bankAccountIBAN;
-        account.celebrityId = request.body.celebrityId;
-        account.userId = request.body.userId;
 
         let accountRepository = getRepository(Account);
         await accountRepository.save(account)
