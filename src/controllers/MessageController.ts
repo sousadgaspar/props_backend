@@ -2,6 +2,8 @@ import {getRepository} from 'typeorm';
 import {Request, Response} from 'express';
 import {Message} from '../entity/Message';
 import {Celebrity} from '../entity/Celebrity';
+import {User} from '../entity/User';
+import {Ocasion} from '../entity/Ocasion';
 import { validationResult } from 'express-validator';
 
 class MessageController { 
@@ -17,10 +19,50 @@ class MessageController {
         let message = new Message();
         let messageRepository = getRepository(Message);
         let celebrityRepository = getRepository(Celebrity);
+        let userRepository = getRepository(User);
+        let ocasionRepository = getRepository(Ocasion);
 
-        message.userId = request.body.userId;
-        message.celebrityId = request.body.celebrityId;
-        message.ocasionId = request.body.ocasionId;
+        let foundUser = Object();
+        await userRepository.findOne({id: request.body.userId})
+            .then(user => foundUser = user)
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            });
+        message.user = foundUser;
+
+        let foundCelebrity = Object();
+        await celebrityRepository.findOne({id: request.body.id})
+            .then(celebrity => foundCelebrity = celebrity)
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            });
+        message.celebrity = foundCelebrity;
+
+        let foundOcasion = Object();
+        await ocasionRepository.findOne({id: request.body.ocasionId})
+            .then(ocasion => foundOcasion = ocasion)
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            });
+        message.ocasion = foundOcasion;
         message.from = request.body.from;
         message.to = request.body.to;
         message.instructions = request.body.instructions;
@@ -105,14 +147,28 @@ class MessageController {
         }
 
         let messageRepository = getRepository(Message);
+        let ocasionRepository = getRepository(Ocasion);
         await messageRepository.findOne({id: request.params.id})
             .then(async foundMessage => {
                 foundMessage.from = request.body.from;
                 foundMessage.to = request.body.to;
                 foundMessage.status = request.body.status;
                 foundMessage.instructions = request.body.instructions;
-                foundMessage.ocasionId = request.body.ocasionId;
                 foundMessage.video = request.body.video;
+
+                let foundOcasion = Object();
+                await ocasionRepository.findOne({id: request.body.ocasionId})
+                    .then(ocasion => foundOcasion = ocasion)
+                    .catch(error => {
+                        response.status(500).send({
+                            errorName: error.name,
+                            errorMessage: error.message,
+                            errorNumber: error.errno,
+                            errorCode: error.code,
+                            sqlMessage: error.sqlMessage,
+                        })
+                    });
+                foundMessage.ocasion = foundOcasion;
                 
                 await messageRepository.save(foundMessage)
                     .then(savedMessage => {

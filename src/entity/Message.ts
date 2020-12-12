@@ -1,21 +1,13 @@
 import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Double, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import { Celebrity } from "./Celebrity";
 import { Ocasion } from "./Ocasion";
+import { User } from "./User";
 
 @Entity()
 export class Message extends BaseEntity {
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
-
-    @Column("varchar", {length: 512})
-    userId: string;
-
-    @Column("varchar", {length: 512})
-    celebrityId: string;
-
-    @Column("varchar", {length: 512})
-    ocasionId: string;
 
     @Column({
         nullable: true
@@ -45,6 +37,9 @@ export class Message extends BaseEntity {
         nullable: true
     })
     video: string;
+
+    @ManyToOne(() => User, user => user.messages)
+    user: User;
 
     @ManyToOne(() => Celebrity, celebrity => celebrity.messages)
     @JoinColumn()
