@@ -1,6 +1,7 @@
 import {getRepository} from 'typeorm';
 import {Request, Response} from 'express';
 import {Subcategory} from '../entity/Subcategory';
+import {Category} from '../entity/Category';
 import {validationResult} from 'express-validator';
 
 class SubcategoryController { 
@@ -15,10 +16,26 @@ class SubcategoryController {
         
         let subcategory = new Subcategory();
         let subcategoryRepository = getRepository(Subcategory);
+        let categoryRespository = getRepository(Category);
+        
         subcategory.name = request.body.name;
-        subcategory.categoryId = request.body.categoryId;
         subcategory.description = request.body.description;
         subcategory.image = request.body.image;
+
+        let foundCategory = Object();
+        await categoryRespository.findOne({id: request.body.categoryId})
+            .then(category => foundCategory = category)
+            .catch(error => {
+                response.status(500).send({
+                    errorName: error.name,
+                    errorMessage: error.message,
+                    errorNumber: error.errno,
+                    errorCode: error.code,
+                    sqlMessage: error.sqlMessage,
+                })
+            });
+
+        subcategory.category = foundCategory;
     
         await subcategoryRepository.save(subcategory)
             .then( value => {
@@ -44,7 +61,7 @@ class SubcategoryController {
         }
 
         let subcategoryRepository = getRepository(Subcategory);
-        await subcategoryRepository.find({categoryId: request.params.id})
+        await subcategoryRepository.find({id: request.params.id})
             .then(foundSubcategories => {
                 if(foundSubcategories.length < 1){
                     return response.status(404).send({
@@ -104,6 +121,7 @@ class SubcategoryController {
         }
 
         let subcategoryRepository = getRepository(Subcategory);
+        let categoryRespository = getRepository(Category);
         await subcategoryRepository.findOne({id: request.params.id})
             .then(async foundSubcategory => {
                 if(foundSubcategory === undefined) {
@@ -115,7 +133,20 @@ class SubcategoryController {
 
                 foundSubcategory.name = request.body.name;
                 foundSubcategory.description = request.body.description;
-                foundSubcategory.categoryId = request.body.categoryId;
+
+                let foundCategory = Object();
+                await categoryRespository.findOne({id: request.body.id})
+                    .then(category => foundCategory = category)
+                    .catch(error => {
+                        response.status(500).send({
+                            errorName: error.name,
+                            errorMessage: error.message,
+                            errorNumber: error.errno,
+                            errorCode: error.code,
+                            sqlMessage: error.sqlMessage,
+                        });
+                    });
+                foundSubcategory.category = foundCategory;
                 
                 await subcategoryRepository.save(foundSubcategory)
                     .then(updatedSubcategory => {
