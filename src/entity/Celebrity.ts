@@ -22,8 +22,7 @@ export class Celebrity extends BaseEntity {
     })
     messageResponseTime: number;
 
-    @OneToMany(() => Message, message => message.celebrityId)
-    @JoinColumn()
+    @OneToMany(() => Message, message => message.celebrity)
     messages: Message[];
 
     @Column()

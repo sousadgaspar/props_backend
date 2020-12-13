@@ -22,8 +22,7 @@ export class Account extends BaseEntity {
     @Column({nullable: true, unique: true})
     bankAccountIBAN: string;
 
-    @OneToMany(() => Transaction, transaction => transaction.accountId, {eager: true, cascade: true})
-    @JoinColumn()
+    @OneToMany(() => Transaction, transaction => transaction.account, {eager: true, cascade: true})
     transactions: Transaction[] 
 
     @CreateDateColumn()

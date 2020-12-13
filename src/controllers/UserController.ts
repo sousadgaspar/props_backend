@@ -57,7 +57,7 @@ class UserController extends BaseEntity{
         let userRepository = getRepository(User);
         await userRepository.find(user)
         .then(value => {
-            console.log("List of Users fetched: " + value);
+            console.log(value);
             response.status(200).send(value);
         })
         .catch(error => {

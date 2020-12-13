@@ -42,7 +42,6 @@ export class Message extends BaseEntity {
     user: User;
 
     @ManyToOne(() => Celebrity, celebrity => celebrity.messages)
-    @JoinColumn()
     celebrity: Celebrity;
 
     @OneToOne(() => Ocasion)

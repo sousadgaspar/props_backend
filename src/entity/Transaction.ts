@@ -1,4 +1,5 @@
-import {Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import { Account } from "./Account";
 const moment = require('moment');
 let dueDate = moment().add(3, 'days').format();
 
@@ -8,8 +9,8 @@ export class Transaction {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
-    accountId: string;
+    @ManyToOne(() => Account, account => account.transactions)
+    account: Account;
 
     @Column()
     messageId: string;

@@ -73,8 +73,7 @@ export class User extends BaseEntity{
     @JoinColumn()
     account: Account;
 
-    @OneToMany(() => Message, message => message.userId, {eager: true, cascade: true})
-    @JoinColumn()
+    @OneToMany(() => Message, message => message.user, {eager: true, cascade: true})
     messages: Message[]
 
     @CreateDateColumn()
