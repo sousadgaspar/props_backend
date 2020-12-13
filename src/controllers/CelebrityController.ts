@@ -5,6 +5,7 @@ import {Category} from '../entity/Category';
 import { validationResult } from 'express-validator';
 import { Subcategory } from '../entity/Subcategory';
 import { isMaster } from 'cluster';
+import { User } from '../entity/User';
 
 class CelebrityController { 
 
@@ -20,6 +21,8 @@ class CelebrityController {
         let celebrityRepository = getRepository(Celebrity);
         let categoryRepository = getRepository(Category);
         let subcategoryRepository = getRepository(Subcategory);
+        let user = new User();
+        celebrity.user = user;
         celebrity.user.firstName = request.body.firstName;
         celebrity.user.lastName = request.body.lastName;
         celebrity.user.nickName = request.body.nickName;
@@ -41,7 +44,7 @@ class CelebrityController {
             })
 
         let returnedSubcategory = Object();
-        await subcategoryRepository.findOne({id: request.body.categoryId})
+        await subcategoryRepository.findOne({id: request.body.subcategoryId})
             .then(Subcategory => {
                 returnedSubcategory = Subcategory;
             })

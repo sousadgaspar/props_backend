@@ -9,7 +9,7 @@ export class Celebrity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @OneToOne(() => User)
+    @OneToOne(() => User, {cascade: true})
     @JoinColumn()
     user: User;
 
