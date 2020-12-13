@@ -10,11 +10,11 @@ export class Celebrity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @OneToOne(() => User, {cascade: true})
+    @OneToOne(() => User, {cascade: true, eager: true})
     @JoinColumn()
     user: User;
 
-    @ManyToMany(() => Category)
+    @ManyToMany(() => Category, {eager: true})
     @JoinTable()
     categories: Category[];
 

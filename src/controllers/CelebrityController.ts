@@ -4,7 +4,6 @@ import {Celebrity} from '../entity/Celebrity';
 import {Category} from '../entity/Category';
 import { validationResult } from 'express-validator';
 import { Subcategory } from '../entity/Subcategory';
-import { isMaster } from 'cluster';
 import { User } from '../entity/User';
 
 class CelebrityController { 
@@ -141,13 +140,20 @@ class CelebrityController {
 
         await celebrityRepository.findOne({id: request.params.id})
             .then(async foundCelebrity => {
+                
+                if( typeof foundCelebrity == 'undefined') response.status(403).send({error: "The reference for Celebrity Entity was not found"});
+
+                let user = new User();
+                foundCelebrity.user = user;
                 foundCelebrity.user.firstName = request.body.firstName;
                 foundCelebrity.user.lastName = request.body.lastName;
                 foundCelebrity.user.nickName = request.body.nickName;
                 foundCelebrity.user.avatar = request.body.avatar;
                 foundCelebrity.user.password = request.body.password;
+                foundCelebrity.user.email = request.body.email;
+                foundCelebrity.user.telephoneNumber = request.body.telephoneNumber;
 
-                if( typeof request.body.categoryId !== undefined) {
+                if( typeof request.body.categoryId !== 'undefined') {
                     let foundCategory = Object();
                     await categoryRepository.findOne({id: request.body.categoryId})
                         .then(category => foundCategory = category)
