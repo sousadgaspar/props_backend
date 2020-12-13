@@ -113,7 +113,7 @@ class CelebrityController {
         }
 
         let celebrityRepository = getRepository(Celebrity);
-        await celebrityRepository.findOne({id: request.params.id})
+        await celebrityRepository.findOne({id: request.params.id}, {relations: ["user", "categories", "subcategories"]})
             .then(value => {
                 response.status(200).send(value);
             })
