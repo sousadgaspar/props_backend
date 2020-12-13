@@ -61,7 +61,7 @@ class SubcategoryController {
         }
 
         let subcategoryRepository = getRepository(Subcategory);
-        await subcategoryRepository.find({id: request.params.id})
+        await subcategoryRepository.find({category: {id: request.params.id}})
             .then(foundSubcategories => {
                 if(foundSubcategories.length < 1){
                     return response.status(404).send({

@@ -1,4 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Column, BaseEntity, OneToOne, JoinColumn, OneToMany} from "typeorm";
+import { RelationCountMetadata } from "typeorm/metadata/RelationCountMetadata";
 import {Account} from './Account';
 import {Message} from './Message';
 
@@ -53,6 +54,11 @@ export class User extends BaseEntity{
         nullable: true
     })
     birthDate: Date;
+
+    @Column({
+        default: "angola"
+    })
+    country: string;
 
     @Column({
         default: true

@@ -17,6 +17,7 @@ class UserController extends BaseEntity{
             user.birthDate = request.body.birthDate;
             user.telephoneNumber = request.body.telephoneNumber;
             user.gender = request.body.gender;
+            request.body.country? user.country = request.body.country: "angola";//add something like DEFAULT_COUNTRY from .env file
 
             //validate the request
             const errors = validationResult(request);
