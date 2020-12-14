@@ -1,4 +1,5 @@
-import {Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import { Message } from "./Message";
 
 @Entity()
 export class Ocasion {
@@ -16,6 +17,9 @@ export class Ocasion {
 
     @Column()
     image: string;
+
+    @ManyToOne(() => Message, message => message.ocasion)
+    messages: Message[];
 
     @CreateDateColumn()
     createdAt: Date;

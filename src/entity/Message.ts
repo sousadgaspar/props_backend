@@ -44,8 +44,7 @@ export class Message extends BaseEntity {
     @ManyToOne(() => Celebrity, celebrity => celebrity.messages)
     celebrity: Celebrity;
 
-    @OneToOne(() => Ocasion)
-    @JoinColumn()
+    @ManyToOne(() => Ocasion, ocasion => ocasion.messages)
     ocasion: Ocasion; 
 
     @CreateDateColumn()

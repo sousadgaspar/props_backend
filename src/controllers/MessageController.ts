@@ -37,8 +37,11 @@ class MessageController {
         message.user = foundUser;
 
         let foundCelebrity = Object();
-        await celebrityRepository.findOne({id: request.body.id})
-            .then(celebrity => foundCelebrity = celebrity)
+        await celebrityRepository.findOne({id: request.body.celebrityId})
+            .then(celebrity => {
+                foundCelebrity = celebrity;
+                message.price = foundCelebrity.messagePrice;
+            })
             .catch(error => {
                 response.status(500).send({
                     errorName: error.name,
@@ -67,19 +70,6 @@ class MessageController {
         message.to = request.body.to;
         message.instructions = request.body.instructions;
         message.isPublic = request.body.isPublic;
-
-        //find the message price from the celebrity profile
-        await celebrityRepository.findOne({id: request.body.celebrityId})
-            .then(foundCelebrity => {
-                message.price = foundCelebrity.messagePrice;
-            })
-            .catch(error => {
-                response.status(500).send({
-                    error: "falha ao retornar o preco da mensagem apartir dos dados do artista.",
-                    detailedError: error
-                })
-            })
-
 
         await messageRepository.save(message)
             .then(savedMessage => {
@@ -123,7 +113,7 @@ class MessageController {
 
         let messageRepository = getRepository(Message);
 
-        await messageRepository.findOne({id: request.params.id})
+        await messageRepository.findOne({id: request.params.id}, {relations: ["celebrity", "user", "ocasion"]})
             .then(foundMessage => {
                 response.status(200).send(foundMessage);
             })
