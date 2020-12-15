@@ -140,6 +140,14 @@ class MessageController {
         let ocasionRepository = getRepository(Ocasion);
         await messageRepository.findOne({id: request.params.id})
             .then(async foundMessage => {
+
+                if(typeof foundMessage == 'undefined') {
+                    response.status(403).send({
+                        error: true,
+                        message: "The message was not found"
+                    })
+                }
+
                 foundMessage.from = request.body.from;
                 foundMessage.to = request.body.to;
                 foundMessage.status = request.body.status;
