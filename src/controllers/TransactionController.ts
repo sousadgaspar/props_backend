@@ -15,28 +15,30 @@ class TransactionController {
             return response.status(400).json({errors: errors});
         }
 
+        const accountRepository = getRepository(Account);
+        const transactionRepository = getRepository(Transaction);
+
         let transaction = new Transaction();
         transaction.type = request.body.type;
-        transaction.accountId = request.body.accountId;
         transaction.messageId = request.body.messageId;
         transaction.value = request.body.value;
 
         //get the account value
-        let accountRepository = getRepository(Account);
-        await accountRepository.findOne({id: transaction.accountId})
+
+        await accountRepository.findOne({id: request.body.accountId})
             .then(foundAccount => {
                 if(foundAccount === undefined) {
                     response.status(404).send({
                         error: true,
-                        message: 'A Conta para a criação desta transação não existe.'
+                        message: 'The account reference is invalid.'
                     })
                 }
                 transaction.valueBeforeTransaction = foundAccount.value;
+                transaction.account = foundAccount;
             })
         transaction.valueAfterTransaction = transaction.valueBeforeTransaction + request.body.value;
         transaction.EMISPaymentReference = request.body.EMISPaymentReference;
         
-        let transactionRepository = getRepository(Transaction);
         await transactionRepository.save(transaction)
             .then(savedTransaction => {
                 response.status(200).send(savedTransaction);
