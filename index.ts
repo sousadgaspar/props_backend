@@ -5,7 +5,7 @@ import {createConnection} from "typeorm";
 
 import { accountController } from "./src/controllers/AccountController";
 import { categoryController } from "./src/controllers/CategoryController";
-import { celebrityController } from "./src/controllers/CelebrityController";
+
 import { libraryItemController } from "./src/controllers/LibraryItemController";
 import { messageController } from "./src/controllers/MessageController";
 import { ocasionController } from "./src/controllers/OcasionController";
@@ -14,7 +14,7 @@ import { transactionController } from "./src/controllers/TransactionController";
 import { paymentGatewayController } from "./src/controllers/PaymentGatewayController";
 
 //import validators 
-import { celebrityValidator } from './src/controllers/validators/celebrityValidator';
+
 import { messageValidator } from './src/controllers/validators/MessageValidator';
 import {categoryValidator} from './src/controllers/validators/CategoryValidator';
 import {ocasionValidator} from './src/controllers/validators/OcasionValidator';
@@ -39,14 +39,8 @@ app.get('/', (request, response) => {
 import {userRoutes} from './src/routes/user';
 app.use('/', userRoutes);
 
-
-//celebrity routes
-app.post('/api/celebrity', celebrityValidator.validate('create'), celebrityController.create);
-app.get('/api/celebrities', celebrityController.index);
-app.get('/api/celebrity/:id', celebrityValidator.validate('show'), celebrityController.show);
-app.put('/api/celebrity/:id', celebrityValidator.validate('update'), celebrityController.update);
-app.delete('/api/celebrity/:id/delete', celebrityValidator.validate('delete'), celebrityController.delete);
-app.delete('/api/celebrity/:id', celebrityValidator.validate('softDelete'), celebrityController.softDelete);
+import {celebrityRoutes} from './src/routes/celebrity';
+app.use('/', celebrityRoutes);
 
 
 //Message routes
