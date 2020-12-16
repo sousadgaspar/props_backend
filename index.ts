@@ -2,7 +2,7 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 
 //import controllers
-import { userController } from './src/controllers/UserController';
+
 import { accountController } from "./src/controllers/AccountController";
 import { categoryController } from "./src/controllers/CategoryController";
 import { celebrityController } from "./src/controllers/CelebrityController";
@@ -14,7 +14,6 @@ import { transactionController } from "./src/controllers/TransactionController";
 import { paymentGatewayController } from "./src/controllers/PaymentGatewayController";
 
 //import validators 
-import { userValidator } from "./src/controllers/validators/UserValidator";
 import { celebrityValidator } from './src/controllers/validators/celebrityValidator';
 import { messageValidator } from './src/controllers/validators/MessageValidator';
 import {categoryValidator} from './src/controllers/validators/CategoryValidator';
@@ -37,18 +36,9 @@ app.get('/', (request, response) => {
     response.send("This is the home page");
 })
 
+import {userRoutes} from './src/routes/user';
+app.use('/', userRoutes);
 
-/*********************************************************/
-// API Endpoints            
-/*********************************************************/
-//User routes
-
-app.post('/api/user', userValidator.validate('create'), userController.create);
-app.get('/api/users', userController.index);
-app.get('/api/user/:id', userValidator.validate('show'), userController.show);
-app.put('/api/user/:id', userValidator.validate('update'), userController.update);
-app.delete('/api/user/:id/delete', userValidator.validate('delete'), userController.delete);
-app.delete('/api/user/:id', userValidator.validate('softDelete'), userController.softDelete);
 
 //celebrity routes
 app.post('/api/celebrity', celebrityValidator.validate('create'), celebrityController.create);

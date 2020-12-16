@@ -24,7 +24,6 @@ class TransactionController {
         transaction.value = request.body.value;
 
         //get the account value
-
         await accountRepository.findOne({id: request.body.accountId})
             .then(foundAccount => {
                 if(foundAccount === undefined) {
