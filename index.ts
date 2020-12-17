@@ -2,8 +2,6 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 
 //import controllers
-
-import { accountController } from "./src/controllers/AccountController";
 import { categoryController } from "./src/controllers/CategoryController";
 import { libraryItemController } from "./src/controllers/LibraryItemController";
 
@@ -15,7 +13,6 @@ import { paymentGatewayController } from "./src/controllers/PaymentGatewayContro
 
 import {categoryValidator} from './src/controllers/validators/CategoryValidator';
 
-import {accountValidator} from './src/controllers/validators/AccountValidator';
 import {subcategoryValidator} from './src/controllers/validators/SubcategoryValidator';
 import {transactionValidator} from './src/controllers/validators/TransactionValidator';
 import {libraryItemValidator} from './src/controllers/validators/LibraryItemValidator';
@@ -45,15 +42,8 @@ app.use('/', messageRoutes);
 import {ocasionRoutes} from './src/routes/ocasion';
 app.use('/', ocasionRoutes);
 
-//Account
-app.post('/api/account', accountValidator.validate('create'), accountController.create);
-app.get('/api/accounts', accountController.index);
-app.get('/api/account/:id', accountValidator.validate('show'), accountController.show);
-app.put('/api/account/:id', accountValidator.validate('update'), accountController.update);
-app.delete('/api/account/:id/delete', accountValidator.validate('delete'), accountController.delete);
-app.delete('/api/account/:id', accountValidator.validate('softDelete'), accountController.softDelete);
-app.put('/api/account/:id/credit', accountValidator.validate('credit'), accountController.credit);
-app.put('/api/account/:id/debit', accountValidator.validate('debit'), accountController.debit);
+import {accountRoutes} from './src/routes/account';
+app.use('/', accountRoutes);
 
 
 //Transaction
