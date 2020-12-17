@@ -5,19 +5,16 @@ import {createConnection} from "typeorm";
 
 import { accountController } from "./src/controllers/AccountController";
 import { categoryController } from "./src/controllers/CategoryController";
-
 import { libraryItemController } from "./src/controllers/LibraryItemController";
-import { messageController } from "./src/controllers/MessageController";
-import { ocasionController } from "./src/controllers/OcasionController";
+
 import { subcategoryController } from "./src/controllers/SubcategoryController";
 import { transactionController } from "./src/controllers/TransactionController";
 import { paymentGatewayController } from "./src/controllers/PaymentGatewayController";
 
 //import validators 
 
-import { messageValidator } from './src/controllers/validators/MessageValidator';
 import {categoryValidator} from './src/controllers/validators/CategoryValidator';
-import {ocasionValidator} from './src/controllers/validators/OcasionValidator';
+
 import {accountValidator} from './src/controllers/validators/AccountValidator';
 import {subcategoryValidator} from './src/controllers/validators/SubcategoryValidator';
 import {transactionValidator} from './src/controllers/validators/TransactionValidator';
@@ -42,25 +39,11 @@ app.use('/', userRoutes);
 import {celebrityRoutes} from './src/routes/celebrity';
 app.use('/', celebrityRoutes);
 
+import {messageRoutes} from './src/routes/message';
+app.use('/', messageRoutes);
 
-//Message routes
-app.post('/api/message', messageValidator.validate('create'), messageController.create);
-app.get('/api/messages', messageController.index);
-app.get('/api/message/:id', messageValidator.validate('show'), messageController.show);
-app.put('/api/message/:id', messageValidator.validate('update'), messageController.update);
-app.put('/api/changestatus/message/:id', messageController.changeStatus);
-app.delete('/api/message/:id/delete', messageValidator.validate('delete'), messageController.delete);
-app.delete('/api/message/:id', messageValidator.validate('softDelete'), messageController.softDelete);
-
-
-//Ocasions routes
-//create
-app.post('/api/ocasion', ocasionValidator.validate('create'), ocasionController.create);
-app.get('/api/ocasions', ocasionController.index);
-app.get('/api/ocasion/:id', ocasionValidator.validate('show'), ocasionController.show);
-app.put('/api/ocasion/:id', ocasionValidator.validate('update'), ocasionController.update);
-app.delete('/api/ocasion/:id/delete', ocasionValidator.validate('delete'), ocasionController.delete);
-app.delete('/api/ocasion/:id', ocasionValidator.validate('softDelete'), ocasionController.softDelete);
+import {ocasionRoutes} from './src/routes/ocasion';
+app.use('/', ocasionRoutes);
 
 //Account
 app.post('/api/account', accountValidator.validate('create'), accountController.create);
