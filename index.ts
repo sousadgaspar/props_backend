@@ -2,19 +2,12 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 
 //import controllers
-import { categoryController } from "./src/controllers/CategoryController";
 import { libraryItemController } from "./src/controllers/LibraryItemController";
-
 import { subcategoryController } from "./src/controllers/SubcategoryController";
-import { transactionController } from "./src/controllers/TransactionController";
 import { paymentGatewayController } from "./src/controllers/PaymentGatewayController";
 
 //import validators 
-
-import {categoryValidator} from './src/controllers/validators/CategoryValidator';
-
 import {subcategoryValidator} from './src/controllers/validators/SubcategoryValidator';
-import {transactionValidator} from './src/controllers/validators/TransactionValidator';
 import {libraryItemValidator} from './src/controllers/validators/LibraryItemValidator';
 
 createConnection();
@@ -48,13 +41,8 @@ app.use('/', accountRoutes);
 import {transactionRoutes} from './src/routes/transaction';
 app.use('/', transactionRoutes);
 
-//Category
-app.post('/api/category', categoryValidator.validate('create'), categoryController.create);
-app.get('/api/categories', categoryController.index);
-app.get('/api/category/:id', categoryValidator.validate('show'), categoryController.show);
-app.put('/api/category/:id', categoryValidator.validate('update'), categoryController.update);
-app.delete('/api/category/:id/delete', categoryValidator.validate('delete'), categoryController.delete);
-app.delete('/api/category/:id', categoryValidator.validate('softDelete'), categoryController.softDelete);
+import {categoryRoutes} from './src/routes/category';
+app.use('/', categoryRoutes);
 
 //Subcategory
 app.post('/api/subcategory', subcategoryValidator.validate('create'), subcategoryController.create);
