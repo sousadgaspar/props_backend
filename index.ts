@@ -45,14 +45,8 @@ app.use('/', ocasionRoutes);
 import {accountRoutes} from './src/routes/account';
 app.use('/', accountRoutes);
 
-
-//Transaction
-app.post('/api/transaction', transactionValidator.validate('create'), transactionController.create);
-app.get('/api/transactions', transactionController.index);
-app.get('/api/transaction/:id', transactionValidator.validate('show'), transactionController.show);
-app.put('/api/transaction/:id', transactionValidator.validate('update'), transactionController.update);
-app.delete('/api/transaction/:id/delete', transactionController.delete);
-app.delete('/api/transaction/:id', transactionController.softDelete);
+import {transactionRoutes} from './src/routes/transaction';
+app.use('/', transactionRoutes);
 
 //Category
 app.post('/api/category', categoryValidator.validate('create'), categoryController.create);
