@@ -1,3 +1,5 @@
+const paymentGatewayController = require("../controllers/PaymentGatewayController");
+const paymentGatewayRoutes = require('express').Router();
 
-
-import {libraryItemValidator} from './src/controllers/validators/LibraryItemValidator';
+paymentGatewayRoutes.get('/api/paymentgateway/emis/generatepaymentreference', paymentGatewayController.generatePaymentReference);
+module.exports.paymentGatewayRoutes = paymentGatewayRoutes;
