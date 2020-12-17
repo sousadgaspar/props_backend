@@ -3,11 +3,11 @@ import {createConnection} from "typeorm";
 
 //import controllers
 import { libraryItemController } from "./src/controllers/LibraryItemController";
-import { subcategoryController } from "./src/controllers/SubcategoryController";
+
 import { paymentGatewayController } from "./src/controllers/PaymentGatewayController";
 
 //import validators 
-import {subcategoryValidator} from './src/controllers/validators/SubcategoryValidator';
+
 import {libraryItemValidator} from './src/controllers/validators/LibraryItemValidator';
 
 createConnection();
@@ -44,13 +44,10 @@ app.use('/', transactionRoutes);
 import {categoryRoutes} from './src/routes/category';
 app.use('/', categoryRoutes);
 
-//Subcategory
-app.post('/api/subcategory', subcategoryValidator.validate('create'), subcategoryController.create);
-app.get('/api/subcategories/:id', subcategoryController.index);
-app.get('/api/subcategory/:id', subcategoryValidator.validate('show'), subcategoryController.show);
-app.put('/api/subcategory/update/:id', subcategoryValidator.validate('update'), subcategoryController.update);
-app.delete('/api/subcategory/:id/delete', subcategoryValidator.validate('delete'), subcategoryController.delete);
-app.delete('/api/subcategory/:id', subcategoryValidator.validate('softDelete'), subcategoryController.softDelete);
+import {subcategoryRoutes} from './src/routes/subcategory';
+app.use('/', subcategoryRoutes);
+
+
 
 //PaymentGateway
 app.get('/api/paymentgateway/emis/generatepaymentreference', paymentGatewayController.generatePaymentReference);
