@@ -3,6 +3,7 @@ import {Request, Response} from 'express';
 import {validationResult} from 'express-validator';
 import {User} from '../entity/User';
 import {Account} from '../entity/Account';
+const bcrypt = require('bcryptjs');
 
 
 export async function create(request: Request, response: Response) {
@@ -12,7 +13,14 @@ export async function create(request: Request, response: Response) {
         user.lastName = request.body.lastName;
         user.avatar = request.body.avatar;
         user.email = request.body.email;
-        user.password = request.body.password;
+
+        //hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(request.body.password, salt);
+
+        console.log(hashedPassword);
+
+        user.password = hashedPassword;
         user.birthDate = request.body.birthDate;
         user.telephoneNumber = request.body.telephoneNumber;
         user.gender = request.body.gender;
@@ -32,7 +40,7 @@ export async function create(request: Request, response: Response) {
             //save the user
             await transactionEntityManager.save(user)
                 .then((value) => {
-                    response.status(200).send(value)
+                    return response.status(200).send(value)
                 })
                 .catch(error => {
                     response.status(500).send({
@@ -54,8 +62,7 @@ export async function  index(request: Request, response: Response) {
     let userRepository = getRepository(User);
     await userRepository.find(user)
     .then(value => {
-        console.log(value);
-        response.status(200).send(value);
+        return response.status(200).send(value);
     })
     .catch(error => {
         response.status(500).send({
@@ -80,7 +87,7 @@ export async function show(request: Request, response: Response) {
 
     let userRepository = getRepository(User);
     await userRepository.findOne({id: request.params.id}).then( value => {
-        response.status(200).send(value);
+        return response.status(200).send(value);
     })
     .catch(error => {
         response.status(500).send({
@@ -109,16 +116,21 @@ export async function update(request: Request, response: Response) {
             foundUser.firstName = request.body.firstName;
             foundUser.lastName = request.body.lastName;
             foundUser.avatar = request.body.avatar;
-            foundUser.password = request.body.password;
+            
+            //hash the password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(request.body.password, salt);
+
+            foundUser.password = hashedPassword;
             foundUser.birthDate = request.body.birthDate;
             foundUser.telephoneNumber = request.body.telephoneNumber;
 
             await userRepository.save(foundUser)
                 .then( savedUser => {
-                    response.status(200).send(savedUser);
+                    return response.status(200).send(savedUser);
                 })
                 .catch(error => {
-                    response.status(500).send({
+                    return response.status(500).send({
                         errorName: error.name,
                         errorMessage: error.message,
                         errorNumber: error.errno,
@@ -128,7 +140,7 @@ export async function update(request: Request, response: Response) {
                 });
             })
             .catch(error => {
-                response.status(500).send({
+                return response.status(500).send({
                     errorName: error.name,
                     errorMessage: error.message,
                     errorNumber: error.errno,
@@ -136,7 +148,7 @@ export async function update(request: Request, response: Response) {
                     sqlMessage: error.sqlMessage,
                 });
             });
-        response.send({
+        return response.send({
             id: request.params.id,
             firstName: request.body.firstName,
             lastName: request.body.lastName,
@@ -157,10 +169,10 @@ export async function del(request: Request, response: Request) {
     let userRepository = getRepository(User);
     await userRepository.delete({id: request.params.id})
         .then(result => {
-            response.status(200).send(result);
+            return response.status(200).send(result);
         })
         .catch(error => {
-            response.status(500).send({
+            return response.status(500).send({
                 errorName: error.name,
                 errorMessage: error.message,
                 errorNumber: error.errno,
@@ -181,10 +193,10 @@ export async function softDelete(request: Request, response: Response) {
     let userRepository = getRepository(User);
     await userRepository.softDelete({id: request.params.id})
         .then(result => {
-            response.status(200).send(result);
+            return response.status(200).send(result);
         })
         .catch(error => {
-            response.status(500).send({
+            return response.status(500).send({
                 errorName: error.name,
                 errorMessage: error.message,
                 errorNumber: error.errno,

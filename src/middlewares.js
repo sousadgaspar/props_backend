@@ -1,15 +1,4 @@
-import "reflect-metadata";
-import {createConnection} from "typeorm";
-
-//set the database connection
-createConnection();
-
-//Setup the web server
-const express = require('express');
-const app = express();
-app.use(express.json());
-
-//Set routes to middlewares 
+//Set routes to middlewares
 import {publicRoutes} from './src/routes/public';
 app.use('/', publicRoutes);
 
@@ -42,7 +31,3 @@ app.use('/', libraryItemRoutes);
 
 import {paymentGatewayRoutes} from './src/routes/paymentGateway';
 app.use('/', paymentGatewayRoutes);
-
-
-//Run server
-app.listen(3000, () => {console.log("listening on port 3000...")});
