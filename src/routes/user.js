@@ -7,8 +7,11 @@ const userRoutes = require('express').Router();
 /*********************************************************/
 //User routes
 
-console.log(userController.index);
+//Business logic
+userRoutes.post('/api/register', userController.register);
+userRoutes.post('/api/login', userController.login);
 
+//Standard
 userRoutes.post('/api/user', userValidator.validate('create'), userController.create);
 userRoutes.get('/api/users', userController.index);
 userRoutes.get('/api/user/:id', userValidator.validate('show'), userController.show);

@@ -5,6 +5,29 @@ import {User} from '../entity/User';
 import {Account} from '../entity/Account';
 const bcrypt = require('bcryptjs');
 
+export async function login(request: Request, response: Response) {
+    // //find the user in the database based on the email
+    // const userRepository = getRepository(User);
+    // const user = await userRepository.findOne({email: request.body.email})
+    //     // .then()
+    //     // .catch();
+
+    // //check the user
+    // if(!user) return response.status(403).json({error: true, message: "user or password wrong"});
+    
+    // //check the password
+    // const validated = await bcrypt.compare(request.body.password, user.password);
+    // if(!validated) return response.status(403).send(user.id);
+    // console.log(validated);
+
+    // return response.status(200).send({_id: user.id});
+}
+
+
+export async function register(request: Request, response: Response) {
+    return create(request, response);
+}
+
 
 export async function create(request: Request, response: Response) {
         //Collect data from the request
@@ -17,8 +40,6 @@ export async function create(request: Request, response: Response) {
         //hash the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(request.body.password, salt);
-
-        console.log(hashedPassword);
 
         user.password = hashedPassword;
         user.birthDate = request.body.birthDate;
@@ -43,13 +64,12 @@ export async function create(request: Request, response: Response) {
                     return response.status(200).send(value)
                 })
                 .catch(error => {
-                    response.status(500).send({
-                        // errorName: error.name,
-                        // errorMessage: error.message,
-                        // errorNumber: error.errno,
-                        // errorCode: error.code,
-                        // sqlMessage: error.sqlMessage,
-                        error
+                    return response.status(500).send({
+                        errorName: error.name,
+                        errorMessage: error.message,
+                        errorNumber: error.errno,
+                        errorCode: error.code,
+                        sqlMessage: error.sqlMessage,
                     })
                 });
 
@@ -66,12 +86,11 @@ export async function  index(request: Request, response: Response) {
     })
     .catch(error => {
         response.status(500).send({
-            // errorName: error.name,
-            // errorMessage: error.message,
-            // errorNumber: error.errno,
-            // errorCode: error.code,
-            // sqlMessage: error.sqlMessage,
-            error
+            errorName: error.name,
+            errorMessage: error.message,
+            errorNumber: error.errno,
+            errorCode: error.code,
+            sqlMessage: error.sqlMessage,
         });
     });
 }
@@ -148,7 +167,7 @@ export async function update(request: Request, response: Response) {
                     sqlMessage: error.sqlMessage,
                 });
             });
-        return response.send({
+        return response.status(200).send({
             id: request.params.id,
             firstName: request.body.firstName,
             lastName: request.body.lastName,
