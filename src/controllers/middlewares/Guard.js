@@ -21,8 +21,6 @@ async function loggedOnly(request, response, nextMiddleware) {
     } catch(error) {
         return response.status(403).send({error: true, message: error.message})
     }
-
-
     nextMiddleware();
 }
 
@@ -48,5 +46,6 @@ async function adminOnly(request, response, nextMiddleware) {
 
     nextMiddleware();
 }
+module.exports.adminOnly = adminOnly;
 module.exports.celebrityOnly = celebrityOnly;
 module.exports.loggedOnly = loggedOnly;
