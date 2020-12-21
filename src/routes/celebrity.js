@@ -1,7 +1,11 @@
 const celebrityController = require("../controllers/CelebrityController");
 const celebrityValidator = require('../controllers/validators/celebrityValidator');
 const celebrityRoutes = require('express').Router();
+const Guard = require('../controllers/middlewares/Guard');
 
+
+//Middlewares
+celebrityRoutes.use('/api/celebrity', Guard.adminOnly);
 
 //celebrity routes
 celebrityRoutes.post('/api/celebrity', celebrityValidator.validate('create'), celebrityController.create);

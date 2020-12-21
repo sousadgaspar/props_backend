@@ -1,15 +1,23 @@
 const userValidator = require("../controllers/validators/UserValidator");
 const userController = require('../controllers/UserController');
 const userRoutes = require('express').Router();
+const Guard = require('../controllers/middlewares/Guard');
 
 /*********************************************************/
 // API Endpoints            
 /*********************************************************/
 //User routes
 
+//middlewares
+userRoutes.use('/api/users', Guard.loggedOnly);
+userRoutes.use('/api/user:id', Guard.loggedOnly);
+userRoutes.use('/api/user:id', Guard.loggedOnly);
+userRoutes.use('/api/user/:id/delete', Guard.loggedOnly);
+userRoutes.use('/api/user/:id', Guard.loggedOnly);
+
 //Business logic
 userRoutes.post('/api/register', userController.register);
-userRoutes.post('/api/login', userController.login);
+userRoutes.post('/api/login',  userController.login);
 userRoutes.post('/api/user/onboard', userController.onboard);
 
 //Standard

@@ -18,16 +18,13 @@ export async function login(request: Request, response: Response) {
     
     //check the password
     const validated = await bcrypt.compare(request.body.password, user.password);
-    console.log(validated);
     if(!validated) return response.status(400).send({error: true, message: "user or password wrong"});
 
-    if(!request.headers.public_api_key) {
+    if(!request.headers.api_public_key) {
         const token = jwt.sign({_id: user.id}, process.env.API_PUBLIC_KEY, {expiresIn: '365d'})
         return response.status(400).json({error: true, message: "save the token locally", token: token})
     }
-    const tokenValidation = await jwt.verify(request.headers.public_api_key, process.env.API_PUBLIC_KEY);
-
-    //console.log(tokenValidation.error);
+    const tokenValidation = await jwt.verify(request.headers.api_public_key, process.env.API_PUBLIC_KEY);
 
     if(tokenValidation.error) return response.status(400).send({error: true, message: "token mismatch"})
 
@@ -38,11 +35,9 @@ export async function onboard(request: Request, response: Response) {
     //create a user only with the telephone number;
 }
 
-
 export async function register(request: Request, response: Response) {
     return create(request, response);
 }
-
 
 export async function create(request: Request, response: Response) {
         //Collect data from the request
@@ -54,9 +49,10 @@ export async function create(request: Request, response: Response) {
 
         //hash the password
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(request.body.password, salt);
-
-        user.password = hashedPassword;
+        if(request.body.password) {
+            const hashedPassword = await bcrypt.hash(request.body.password, salt);
+            user.password = hashedPassword;
+        }
         user.birthDate = request.body.birthDate;
         user.telephoneNumber = request.body.telephoneNumber;
         user.gender = request.body.gender;
@@ -78,7 +74,7 @@ export async function create(request: Request, response: Response) {
                 .then((value) => {
                     //generate the token
                     const token = jwt.sign({_id: value.id}, process.env.API_PUBLIC_KEY, {expiresIn: '365d'});
-                    return response.status(200).send({user: user, token: token});
+                    return response.status(201).send({user: user, token: token});
                 })
                 .catch(error => {
                     return response.status(500).send({

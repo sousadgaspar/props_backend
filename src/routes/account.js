@@ -1,6 +1,15 @@
 const accountValidator = require("../controllers/validators/AccountValidator");
 const  accountController  = require("../controllers/AccountController");
 const accountRoutes = require('express').Router();
+const Guard = require('../controllers/middlewares/Guard');
+
+//Middlewares
+accountRoutes.use('/api/account', Guard.loggedOnly);
+accountRoutes.use('/api/accounts', Guard.loggedOnly);
+accountRoutes.use('/api/account/:id', Guard.loggedOnly);
+accountRoutes.use('/api/account/:id/delete', Guard.loggedOnly);
+accountRoutes.use('/api/account/:id/credit', Guard.loggedOnly);
+accountRoutes.use('/api/account/:id/debit', Guard.loggedOnly);
 
 //Account
 accountRoutes.post('/api/account', accountValidator.validate('create'), accountController.create);
