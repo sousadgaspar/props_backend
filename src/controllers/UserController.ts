@@ -4,23 +4,38 @@ import {validationResult} from 'express-validator';
 import {User} from '../entity/User';
 import {Account} from '../entity/Account';
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const dotEnv = require('dotenv');
+dotEnv.config();
 
 export async function login(request: Request, response: Response) {
-    // //find the user in the database based on the email
-    // const userRepository = getRepository(User);
-    // const user = await userRepository.findOne({email: request.body.email})
-    //     // .then()
-    //     // .catch();
+    //find the user in the database based on the email
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({where: [{email: request.body.email}, {telephoneNumber: request.body.telephoneNumber}]})
 
-    // //check the user
-    // if(!user) return response.status(403).json({error: true, message: "user or password wrong"});
+    //check the user
+    if(!user) return response.status(400).json({error: true, message: "user not found"});
     
-    // //check the password
-    // const validated = await bcrypt.compare(request.body.password, user.password);
-    // if(!validated) return response.status(403).send(user.id);
-    // console.log(validated);
+    //check the password
+    const validated = await bcrypt.compare(request.body.password, user.password);
+    console.log(validated);
+    if(!validated) return response.status(400).send({error: true, message: "user or password wrong"});
 
-    // return response.status(200).send({_id: user.id});
+    if(!request.headers.public_api_key) {
+        const token = jwt.sign({_id: user.id}, process.env.API_PUBLIC_KEY, {expiresIn: '365d'})
+        return response.status(400).joson({error: true, message: "save the token locally", token: token})
+    }
+    const tokenValidation = await jwt.verify(request.headers.public_api_key, process.env.API_PUBLIC_KEY);
+
+    //console.log(tokenValidation.error);
+
+    if(tokenValidation.error) return response.status(400).send({error: true, message: "token mismatch"})
+
+    return response.status(200).send({success: true, _id: user.id, token: tokenValidation});
+}
+
+export async function onboard(request: Request, response: Response) {
+    //create a user only with the telephone number;
 }
 
 
@@ -61,7 +76,9 @@ export async function create(request: Request, response: Response) {
             //save the user
             await transactionEntityManager.save(user)
                 .then((value) => {
-                    return response.status(200).send(value)
+                    //generate the token
+                    const token = jwt.sign({_id: value.id}, process.env.API_PUBLIC_KEY, {expiresIn: '365d'});
+                    return response.status(200).send({user: user, token: token});
                 })
                 .catch(error => {
                     return response.status(500).send({
@@ -72,7 +89,6 @@ export async function create(request: Request, response: Response) {
                         sqlMessage: error.sqlMessage,
                     })
                 });
-
         })
 }
 

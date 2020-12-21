@@ -10,6 +10,7 @@ const userRoutes = require('express').Router();
 //Business logic
 userRoutes.post('/api/register', userController.register);
 userRoutes.post('/api/login', userController.login);
+userRoutes.post('/api/user/onboard', userController.onboard);
 
 //Standard
 userRoutes.post('/api/user', userValidator.validate('create'), userController.create);

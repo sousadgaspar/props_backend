@@ -75,6 +75,11 @@ export class User extends BaseEntity{
     })
     session_token: string;
 
+    @Column({
+        default: true
+    })
+    hasToChangePassword: boolean;
+
     @OneToOne(() => Account, {eager: true, cascade: true})
     @JoinColumn()
     account: Account;
