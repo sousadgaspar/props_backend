@@ -23,7 +23,7 @@ export async function login(request: Request, response: Response) {
 
     if(!request.headers.public_api_key) {
         const token = jwt.sign({_id: user.id}, process.env.API_PUBLIC_KEY, {expiresIn: '365d'})
-        return response.status(400).joson({error: true, message: "save the token locally", token: token})
+        return response.status(400).json({error: true, message: "save the token locally", token: token})
     }
     const tokenValidation = await jwt.verify(request.headers.public_api_key, process.env.API_PUBLIC_KEY);
 
