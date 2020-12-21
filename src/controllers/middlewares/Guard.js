@@ -12,14 +12,16 @@ const jwt = require('jsonwebtoken');
  * 
 */
 async function loggedOnly(request, response, nextMiddleware) {
-    console.log("this is the guard");
     //get the request header token
-    const token = request.headers.api_user_token;
+    const token = request.headers.api_user_key;
     if(!token) return response.status(401).json({error: true, message: "unauthorized route"});
 
-    const tokenValidation = await jwt.verify(token, process.env.API_PUBLIC_KEY);
+    try{
+        const tokenValidation = await jwt.verify(token, process.env.API_PUBLIC_KEY);
+    } catch(error) {
+        return response.status(403).send({error: true, message: error.message})
+    }
 
-    if(tokenValidation.error) return response.status(403).send({error: true, message: "token mismatch"})
 
     nextMiddleware();
 }
