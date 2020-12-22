@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToMany } from 'typeorm';
+import { Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Entity, BaseEntity, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Celebrity } from './Celebrity';
 import { Subcategory } from './Subcategory';
 import { User } from './User';
@@ -22,7 +22,7 @@ export class Category extends BaseEntity {
     image: string;
 
     @ManyToMany(() => Celebrity, celebrity => celebrity.categories)
-    @JoinColumn()
+    @JoinTable()
     celebrities: Celebrity[];
 
     @OneToMany(() => Subcategory, subcategory => subcategory.category)

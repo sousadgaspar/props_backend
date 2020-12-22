@@ -25,6 +25,9 @@ celebrity.user.lastName = request.body.lastName;
 celebrity.user.nickName = request.body.nickName;
 celebrity.user.avatar = request.body.avatar;
 
+if(!request.body.categoryId) return response.status(400).json({error: true, message: "Category is not set"});
+//if(!request.body.subcategoryId) return response.status(400).json({error: true, message: "Category is not set"});
+
 let returnedCategory = Object();
 await categoryRepository.findOne({id: request.body.categoryId})
     .then(category => {
@@ -40,22 +43,22 @@ await categoryRepository.findOne({id: request.body.categoryId})
         })
     })
 
-let returnedSubcategory = Object();
-await subcategoryRepository.findOne({id: request.body.subcategoryId})
-    .then(Subcategory => {
-        returnedSubcategory = Subcategory;
-    })
-    .catch(error => {
-        response.status(500).send({
-            errorName: error.name,
-            errorMessage: error.message,
-            errorNumber: error.errno,
-            errorCode: error.code,
-            sqlMessage: error.sqlMessage,
-        })
-    })
+// let returnedSubcategory = Object();
+// await subcategoryRepository.findOne({id: request.body.subcategoryId})
+//     .then(Subcategory => {
+//         returnedSubcategory = Subcategory;
+//     })
+//     .catch(error => {
+//         response.status(500).send({
+//             errorName: error.name,
+//             errorMessage: error.message,
+//             errorNumber: error.errno,
+//             errorCode: error.code,
+//             sqlMessage: error.sqlMessage,
+//         })
+//     })
 
-    returnedCategory.subcategories = [returnedSubcategory];
+//     returnedCategory.subcategories = [returnedSubcategory];
 
 celebrity.categories = [returnedCategory];
 celebrity.user.description = request.body.description;

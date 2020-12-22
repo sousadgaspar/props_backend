@@ -36,7 +36,10 @@ export async function index(request: Request, response: Response) {
     let category = new Category();
     await getRepository(Category).find(category)
     .then( fectchedCategories => {
-        console.log(fectchedCategories);
+        fectchedCategories.forEach((category) => {
+            console.log(category.name + category.image);
+        })
+
         response.status(200).send(fectchedCategories);
     })
     .catch(error => {
@@ -46,6 +49,7 @@ export async function index(request: Request, response: Response) {
             errorNumber: error.errno,
             errorCode: error.code,
             sqlMessage: error.sqlMessage,
+            error: error
         })
     });
 }
