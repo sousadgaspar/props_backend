@@ -11,4 +11,6 @@ messageRoutes.put('/api/changestatus/message/:id', messageController.changeStatu
 messageRoutes.delete('/api/message/:id/delete', messageValidator.validate('delete'), messageController.del);
 messageRoutes.delete('/api/message/:id', messageValidator.validate('softDelete'), messageController.softDelete);
 
+
+
 module.exports.messageRoutes = messageRoutes;

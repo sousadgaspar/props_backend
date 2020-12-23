@@ -16,8 +16,6 @@ import { body, header, param } from 'express-validator';
             body('celebrityId', 'A referência da celebridade está incorrecta').isUUID(),
             body('ocasionId', 'A referência da ocasião não está correcta').notEmpty(),
             body('ocasionId', 'A referência da ocasião está incorrecta').isUUID(),
-            body('price', 'O campo preço não pode estar vazio').notEmpty(),
-            body('price', 'O campo preço está com um formato incorrecto'),
         ]; break;
         case 'show': return [
             param('id', 'A referência do ID que passou não existe').isUUID(),

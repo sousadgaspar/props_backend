@@ -5,6 +5,7 @@ import {Celebrity} from '../entity/Celebrity';
 import {User} from '../entity/User';
 import {Ocasion} from '../entity/Ocasion';
 import { validationResult } from 'express-validator';
+import { ClientResponse } from 'http';
 
 
 export async function create(request: Request, response: Response) {
@@ -87,8 +88,8 @@ export async function create(request: Request, response: Response) {
 export async function index(request: Request, response: Response) {
     let messageRepository = getRepository(Message);
     await messageRepository.find()
-        .then(collection => {
-            response.status(200).send(collection);
+        .then(messages => {
+            response.status(200).send(messages);
         })
         .catch(error => {
             response.status(500).send({

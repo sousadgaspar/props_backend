@@ -1,7 +1,9 @@
 import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Double, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import { Celebrity } from "./Celebrity";
+import { Transaction } from "./Transaction";
 import { Ocasion } from "./Ocasion";
 import { User } from "./User";
+import { JoinAttribute } from "typeorm/query-builder/JoinAttribute";
 
 @Entity()
 export class Message extends BaseEntity {
@@ -45,6 +47,7 @@ export class Message extends BaseEntity {
     celebrity: Celebrity;
 
     @ManyToOne(() => Ocasion, ocasion => ocasion.messages)
+    @JoinColumn()
     ocasion: Ocasion; 
 
     @CreateDateColumn()
