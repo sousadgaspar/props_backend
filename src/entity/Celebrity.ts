@@ -13,8 +13,7 @@ export class Celebrity extends BaseEntity {
     @JoinColumn()
     user: User;
 
-    @ManyToMany(() => Category)
-    @JoinTable()
+    @ManyToMany(() => Category, category => category.celebrities)
     categories: Category[];
 
     @Column({

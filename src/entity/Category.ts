@@ -25,7 +25,7 @@ export class Category extends BaseEntity {
     @JoinTable()
     celebrities: Celebrity[];
 
-    @OneToMany(() => Subcategory, subcategory => subcategory.category)
+    @OneToMany(() => Subcategory, subcategory => subcategory.category, {eager: true})
     @JoinColumn()
     subcategories: Category[];
 

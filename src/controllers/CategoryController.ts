@@ -34,7 +34,7 @@ export async function create(request: Request, response: Response) {
 export async function index(request: Request, response: Response) {
 
     let category = new Category();
-    await getRepository(Category).find(category)
+    await getRepository(Category).find({relations: ["celebrities"]})
     .then( fectchedCategories => {
         fectchedCategories.forEach((category) => {
             console.log(category.name + category.image);

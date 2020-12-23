@@ -2,6 +2,10 @@ const categoryController = require("../controllers/CategoryController");
 const categoryValidator = require('../controllers/validators/CategoryValidator');
 
 const categoryRoutes = require('express').Router();
+const Guard = require('../controllers/middlewares/Guard');
+
+//Apply middlewares
+categoryRoutes.use('/api/category', Guard.loggedOnly);
 
 //Category
 categoryRoutes.post('/api/category', categoryValidator.validate('create'), categoryController.create);
