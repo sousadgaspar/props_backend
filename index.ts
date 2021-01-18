@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
+const path = require('path');
 
 //set the database connection
 createConnection();
@@ -8,6 +9,10 @@ createConnection();
 const express = require('express');
 const app = express();
 app.use(express.json());
+//Require multer for ectype multipart/form-data
+const multer = require('multer');
+//app.use(multer.array());
+app.use(express.static('public'));
 
 //Set routes to middlewares 
 import {publicRoutes} from './src/routes/public';
@@ -45,4 +50,4 @@ app.use('/', paymentGatewayRoutes);
 
 
 //Run server
-app.listen(3000, () => {console.log("listening on port 3000...")});
+app.listen(7000, () => {console.log("listening on port 7000...")});

@@ -32,6 +32,23 @@ export class Celebrity extends BaseEntity {
     })
     messagePriceCurrency: string;
 
+    @Column({
+        nullable: true
+    })
+    facebookProfile: string;
+
+    @Column({nullable: true})
+    twitterProfile: string;
+
+    @Column({nullable: true})
+    instagramProfile: string;
+
+    @Column({nullable: true})
+    youtubeProfile: string;
+
+    @Column({nullable: true})
+    tiktokProfile: string;
+
     @CreateDateColumn()
     createdAt: Date;
 
