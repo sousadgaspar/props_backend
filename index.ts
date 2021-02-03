@@ -8,11 +8,11 @@ createConnection();
 //Setup the web server
 const express = require('express');
 const app = express();
+app.use(express.static('media'));
 app.use(express.json());
 //Require multer for ectype multipart/form-data
 const multer = require('multer');
 //app.use(multer.array());
-app.use(express.static('public'));
 
 //Set routes to middlewares 
 import {publicRoutes} from './src/routes/public';

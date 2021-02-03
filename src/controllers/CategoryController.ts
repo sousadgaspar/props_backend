@@ -14,7 +14,11 @@ export async function create(request: Request, response: Response) {
     let categoryRepository = getRepository(Category);
     category.name = request.body.name;
     category.description = request.body.description;
-    category.image = request.body.image;
+    category.image = request.file? request.file.originalname: 'default-category-image.png';
+
+
+    // console.log(request.file);
+    // return 
 
     await categoryRepository.save(category)
         .then(value => {

@@ -9,6 +9,10 @@ const dotEnv = require('dotenv');
 dotEnv.config();
 
 export async function login(request: Request, response: Response) {
+
+    //dump the request 
+    console.log(request.body);
+
     //find the user in the database based on the email or telephoneNumber
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({where: [{email: request.body.email}, {telephoneNumber: request.body.telephoneNumber}]})

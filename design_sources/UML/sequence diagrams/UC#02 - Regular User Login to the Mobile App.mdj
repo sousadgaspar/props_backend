@@ -591,9 +591,9 @@
 												"$ref": "AAAAAAF3IdOdBsD5zCM="
 											},
 											"font": "Arial;13;0",
-											"left": 115,
+											"left": 113,
 											"top": 136,
-											"width": 184.81201171875,
+											"width": 189.16015625,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 10,
@@ -2264,9 +2264,9 @@
 										"$ref": "AAAAAAF3IclD+r9w3go="
 									},
 									"font": "Arial;13;0",
-									"left": 1056,
-									"top": 88,
-									"width": 129,
+									"left": 960,
+									"top": 136,
+									"width": 85.0380859375,
 									"height": 155,
 									"text": "The Thank you screen has the following options: #Back #Go to DashBoard #Login"
 								}
