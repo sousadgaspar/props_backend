@@ -5,6 +5,7 @@ import {Category} from '../entity/Category';
 import { validationResult } from 'express-validator';
 import { Subcategory } from '../entity/Subcategory';
 import { User } from '../entity/User';
+const bcrypt = require('bcrypt');
 
 //create
 export async function create(request: Request, response: Response) {
@@ -25,14 +26,21 @@ export async function create(request: Request, response: Response) {
     celebrity.user.firstName = request.body.firstName;
     celebrity.user.lastName = request.body.lastName;
     celebrity.user.nickName = request.body.nickName;
-    celebrity.user.avatar = request.body.avatar;
+    celebrity.user.avatar = request.file? request.file.originalname : 'celebrity-default-photo.png';
     celebrity.user.description = request.body.description;
     celebrity.user.email = request.body.email;
     celebrity.user.password = request.body.password;
+    //hash the password
+    const salt = await bcrypt.genSalt(10);
+    if(request.body.password) {
+        const hashedPassword = await bcrypt.hash(request.body.password, salt);
+        celebrity.user.password = hashedPassword;
+    }
     celebrity.messagePrice = request.body.messagePrice;
     celebrity.messagePriceCurrency = request.body.messagePriceCurrency;
     celebrity.messageResponseTime = request.body.messageResponseTime;
     celebrity.user.telephoneNumber = request.body.telephoneNumber;
+    celebrity.user.isCelebrity = true;
 
     let returnedCategory = Object();
     await categoryRepository.findOne({id: request.body.categoryId})

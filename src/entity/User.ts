@@ -61,6 +61,11 @@ export class User extends BaseEntity{
     country: string;
 
     @Column({
+        default: false
+    })
+    isCelebrity: boolean;
+
+    @Column({
         default: true
     })
     isActive: boolean;

@@ -14,7 +14,7 @@ export async function create(request: Request, response: Response) {
     let ocasion = new Ocasion();
     ocasion.name = request.body.name;
     ocasion.description = request.body.description;
-    ocasion.image = request.body.image;
+    ocasion.image = request.file.originalname;
 
     let ocasionRepository = getRepository(Ocasion);
     await ocasionRepository.save(ocasion)

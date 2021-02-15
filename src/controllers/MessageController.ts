@@ -5,7 +5,8 @@ import {Celebrity} from '../entity/Celebrity';
 import {User} from '../entity/User';
 import {Ocasion} from '../entity/Ocasion';
 import { validationResult } from 'express-validator';
-import { ClientResponse } from 'http';
+import {Transaction} from '../entity/Transaction';
+import {Account} from '../entity/Account';
 
 
 export async function create(request: Request, response: Response) {
@@ -20,6 +21,8 @@ export async function create(request: Request, response: Response) {
     let celebrityRepository = getRepository(Celebrity);
     let userRepository = getRepository(User);
     let ocasionRepository = getRepository(Ocasion);
+    const accountRepository = getRepository(Account);
+    const transactionRepository = getRepository(Transaction);
 
     let foundUser = Object();
     await userRepository.findOne({id: request.body.userId})
@@ -87,7 +90,7 @@ export async function create(request: Request, response: Response) {
 
 export async function index(request: Request, response: Response) {
     let messageRepository = getRepository(Message);
-    await messageRepository.find()
+    await messageRepository.find({relations: ["celebrity", "user"]})
         .then(messages => {
             response.status(200).send(messages);
         })

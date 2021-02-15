@@ -40,6 +40,11 @@ export class Message extends BaseEntity {
     })
     video: string;
 
+    @Column({
+        nullable: true
+    })
+    comments: string;
+
     @ManyToOne(() => User, user => user.messages)
     user: User;
 

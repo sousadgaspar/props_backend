@@ -10,9 +10,6 @@ dotEnv.config();
 
 export async function login(request: Request, response: Response) {
 
-    //dump the request 
-    console.log(request.body);
-
     //find the user in the database based on the email or telephoneNumber
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({where: [{email: request.body.email}, {telephoneNumber: request.body.telephoneNumber}]})
@@ -43,7 +40,7 @@ export async function create(request: Request, response: Response) {
         let user = new User();
         user.firstName = request.body.firstName;
         user.lastName = request.body.lastName;
-        user.avatar = request.body.avatar;
+        user.avatar = request.file? request.file.originalname: 'default-user.png';
         user.email = request.body.email;
 
         //hash the password
