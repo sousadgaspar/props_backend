@@ -7,7 +7,14 @@ import { Subcategory } from '../entity/Subcategory';
 import { User } from '../entity/User';
 const bcrypt = require('bcrypt');
 
-//create
+/*
+*
+* create: create a new User register in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function create(request: Request, response: Response) {
     //Validate the request
     const errors = validationResult(request);
@@ -78,7 +85,14 @@ export async function create(request: Request, response: Response) {
 }
 
 
-//Index
+/*
+*
+* index: list all the User registers in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function  index(request: Request, response: Response) {
 let celebrity = new Celebrity();
 let celebrityRepository = getRepository(Celebrity);
@@ -98,7 +112,15 @@ await celebrityRepository.find(celebrity)
     })
 }
 
-//Show
+
+/*
+*
+* show: list a specific user based on the database Id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function  show(request: Request, response: Response) {
 
 //validate the request
@@ -108,7 +130,7 @@ if(!errors.isEmpty()){
 }
 
 let celebrityRepository = getRepository(Celebrity);
-await celebrityRepository.findOne({id: request.params.id}, {relations: ["user", "categories", "subcategories"]})
+await celebrityRepository.findOne({id: request.params.id}, {relations: ["user", "categories"]})
     .then(value => {
         response.status(200).send(value);
     })
@@ -123,6 +145,15 @@ await celebrityRepository.findOne({id: request.params.id}, {relations: ["user", 
     });
 }
 
+
+/*
+*
+* update: update a specific user based on the database Id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function  update(request: Request, response: Response) {
 //validate the request
 const errors = validationResult(request);
@@ -204,7 +235,14 @@ await celebrityRepository.findOne({id: request.params.id})
 }
 
 
-//Delete
+/*
+*
+* del: hard delete a specific user based on the database Id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function  del(request: Request, response: Response) {
 
 //validate the request
@@ -230,7 +268,14 @@ await celebrityRepository.delete({id: request.params.id})
 }
 
 
-//Soft Delete
+/*
+*
+* del: soft delete a specific user based on the database Id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function  softDelete(request: Request, response: Response) {
 
 //validate the request

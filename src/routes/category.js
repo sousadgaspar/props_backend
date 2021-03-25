@@ -26,7 +26,6 @@ const fileFilter = (request, file, cb) => {
 
 
 //const fields = categoriesImageStorage.fields([{name: 'name', maxCount: 1}, {name: 'description', maxCount: 1}, {name: 'image', maxCount: 1}]);
-
 const upload = multer({storage: storage, fileFilter: fileFilter});
 
 const categoryRoutes = require('express').Router();
