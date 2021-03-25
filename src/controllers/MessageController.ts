@@ -9,6 +9,14 @@ import {Transaction} from '../entity/Transaction';
 import {Account} from '../entity/Account';
 
 
+/*
+*
+* create: create a new Message register in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function create(request: Request, response: Response) {
     //Validate the request
     const errors = validationResult(request);
@@ -88,6 +96,15 @@ export async function create(request: Request, response: Response) {
         });
 }
 
+
+/*
+*
+* index: list all Message registers in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function index(request: Request, response: Response) {
     let messageRepository = getRepository(Message);
     await messageRepository.find({relations: ["celebrity", "user"]})
@@ -130,6 +147,15 @@ export async function show(request: Request, response: Response) {
         })
 }
 
+
+/*
+*
+* userMessage: list all Message registers in the database for a spacific user based on the database userId
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function userMessages(request: Request, response: Response) {
 
     //Validate the request
@@ -157,6 +183,15 @@ export async function userMessages(request: Request, response: Response) {
         })
 }
 
+
+/*
+*
+* update: update a specific register based on the database register id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function update(request: Request, response: Response) {
 
     //Validate the request
@@ -222,6 +257,15 @@ export async function update(request: Request, response: Response) {
         })
 }
 
+
+/*
+*
+* del: hard delete a specific register based on the database register id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function del(request: Request, response: Response) {
 
     //Validate the request
@@ -246,6 +290,15 @@ export async function del(request: Request, response: Response) {
         })
 }
 
+
+/*
+*
+* sofDelete: soft delete a specific register based on the database register id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function softDelete(request: Request, response: Response) {
 
     //Validate the request
@@ -270,6 +323,15 @@ export async function softDelete(request: Request, response: Response) {
         })
 }
 
+
+/*
+*
+* changeStatus: change the status of a specific Message based on the database register id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function changeStatus(request: Request, response: Response) {
     let messageRepository = getRepository(Message);
     await messageRepository.findOne({id: request.params.id})
