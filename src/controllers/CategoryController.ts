@@ -3,6 +3,14 @@ import {Request, Response} from 'express';
 import {Category} from '../entity/Category';
 import { validationResult } from 'express-validator';
 
+/*
+*
+* create: create a new Category register in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function create(request: Request, response: Response) {
     //Validate the request
     const errors = validationResult(request);
@@ -35,6 +43,16 @@ export async function create(request: Request, response: Response) {
         });
 }
 
+
+/*
+*
+* index: list all the Categories register in the database, 
+*   it returns also the associated celebrities associated with the categories
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function index(request: Request, response: Response) {
 
     let category = new Category();
@@ -58,6 +76,15 @@ export async function index(request: Request, response: Response) {
     });
 }
 
+
+/*
+*
+* show: return a specific Category based on database register index
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function show(request: Request, response: Response) {
 
     //Validate the request
@@ -83,6 +110,15 @@ export async function show(request: Request, response: Response) {
         })
 }
 
+
+/*
+*
+* update: update a specific Category based on database register index
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function update(request: Request, response: Response) {
 
     //Validate the request
@@ -129,6 +165,14 @@ export async function update(request: Request, response: Response) {
         })
 }
 
+/*
+*
+* del: hard delete a specific Category based on database register index
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function del(request: Request, response: Response) {
     
     //Validate the request
@@ -164,6 +208,15 @@ export async function del(request: Request, response: Response) {
         });
 }
 
+
+/*
+*
+* softDelete: soft delete a specific Category based on database register index
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function softDelete(request: Request, response: Response) {
 
     //Validate the request

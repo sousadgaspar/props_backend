@@ -130,6 +130,33 @@ export async function show(request: Request, response: Response) {
         })
 }
 
+export async function userMessages(request: Request, response: Response) {
+
+    //Validate the request
+    const errors = validationResult(request);
+    if(!errors.isEmpty()){
+        return response.status(400).json({errors: errors});
+    }
+
+    let messageRepository = getRepository(Message);
+    let userRepository = getRepository(User);
+    let user = userRepository.findOne({id: request.params.id})
+
+    await messageRepository.find({where: {user: user}})
+        .then(foundMessage => {
+            response.status(200).send(foundMessage);
+        })
+        .catch(error => {
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            });
+        })
+}
+
 export async function update(request: Request, response: Response) {
 
     //Validate the request
