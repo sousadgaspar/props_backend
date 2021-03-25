@@ -8,6 +8,15 @@ const jwt = require('jsonwebtoken');
 const dotEnv = require('dotenv');
 dotEnv.config();
 
+
+/*
+*
+* create: login to the system, check the credentials, email or telephone number and password
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function login(request: Request, response: Response) {
 
     //find the user in the database based on the email or telephoneNumber
@@ -27,14 +36,41 @@ export async function login(request: Request, response: Response) {
     return response.status(200).send({success: true, _id: user.id, user: user, token: token});
 }
 
+
+/*
+*
+* onboard: create a User register only with the telephone number (Lite user);
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function onboard(request: Request, response: Response) {
     //create a user only with the telephone number;
 }
 
+
+/*
+*
+* register: a wrapper of create method
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function register(request: Request, response: Response) {
     return create(request, response);
 }
 
+
+/*
+*
+* create: create a new register of the User object in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function create(request: Request, response: Response) {
         //Collect data from the request
         let user = new User();
@@ -85,6 +121,15 @@ export async function create(request: Request, response: Response) {
 }
 
 
+
+/*
+*
+* index: list all the User register in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function  index(request: Request, response: Response) {
     let user = new User();
     let userRepository = getRepository(User);
@@ -104,6 +149,15 @@ export async function  index(request: Request, response: Response) {
 }
 
 
+
+/*
+*
+* show: list a specific User based on the id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function show(request: Request, response: Response) {
     
     //validate the request
@@ -128,6 +182,14 @@ export async function show(request: Request, response: Response) {
 }
 
 
+/*
+*
+* udate: update a specific User information based on the id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function update(request: Request, response: Response) {
     let userRepository = getRepository(User);
 
@@ -184,6 +246,15 @@ export async function update(request: Request, response: Response) {
         });
 }
 
+
+/*
+*
+* del: hard delete a specific User based on the id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function del(request: Request, response: Request) {
 
     //validate the request
@@ -209,6 +280,15 @@ export async function del(request: Request, response: Request) {
         })
 }
 
+
+/*
+*
+* softDelete: soft delete a specific User based on the id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function softDelete(request: Request, response: Response) {
     //validate the request
     const errors = validationResult(request);
