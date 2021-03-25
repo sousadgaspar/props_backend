@@ -231,11 +231,12 @@ export async function softDelete(request: Request, response: Response) {
             if(result.raw.affectedRows > 0) {
                 response.status(200).send({
                     error: false,
+                    result: 'sucess',
                     message: {"affectedRows": result.affected}
                 })
             } else {
                 response.status(404).send({
-                    error: false,
+                    error: true,
                     message: 'category not found'
                 })
             }
