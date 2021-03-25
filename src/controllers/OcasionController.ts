@@ -3,7 +3,14 @@ import {Request, Response} from 'express';
 import {Ocasion} from '../entity/Ocasion';
 import {validationResult} from 'express-validator';
 
-
+/*
+*
+* create: create an Ocasion register in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function create(request: Request, response: Response) {
 
     const errors = validationResult(request);
@@ -32,6 +39,15 @@ export async function create(request: Request, response: Response) {
         });
 }
 
+
+/*
+*
+* index: list all Ocasion registers in the database
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function index(request: Request, response: Response) {
     let ocasion = new Ocasion();
     let ocasionRepository = getRepository(Ocasion);
@@ -51,6 +67,15 @@ export async function index(request: Request, response: Response) {
         });
 }
 
+
+/*
+*
+* show: list a specific ocasion based in the id index
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function show(request: Request, response: Response) {
 
     const errors = validationResult(request);
@@ -74,6 +99,15 @@ export async function show(request: Request, response: Response) {
         })
 }
 
+
+/*
+*
+* update: update a specific ocasion based in the id index
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function update(request: Request, response: Response) {
 
     const errors = validationResult(request);
@@ -105,6 +139,15 @@ export async function update(request: Request, response: Response) {
     
 }
 
+
+/*
+*
+* del: hard delete a specific ocasion based in the id index
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function del(request: Request, response: Response) {
     
     const errors = validationResult(request);
@@ -128,6 +171,15 @@ export async function del(request: Request, response: Response) {
         })
 }
 
+
+/*
+*
+* softDelete: soft delete a specific ocasion based in the id index
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
 export async function softDelete(request: Request, response: Response) {
     
     const errors = validationResult(request);

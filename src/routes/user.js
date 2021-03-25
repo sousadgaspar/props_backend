@@ -19,7 +19,7 @@ userRoutes.use('/api/user/:id', Guard.loggedOnly);
 //Business logic
 userRoutes.post('/api/register', userController.register);
 userRoutes.post('/api/login',  userController.login);
-userRoutes.post('/api/user/onboard', userController.onboard);
+userRoutes.post('/api/user/onboard', userController.onboard);//method not implemented
 
 //Standard
 userRoutes.post('/api/user', fileUploader.updloadSingle('media/user-photos', 'image'), userValidator.validate('create'), userController.create);
