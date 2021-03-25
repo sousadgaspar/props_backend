@@ -252,8 +252,16 @@ if(!errors.isEmpty()){
 }
 
 let celebrityRepository = getRepository(Celebrity);
+let userRepository = getRepository(User);
 await celebrityRepository.delete({id: request.params.id})
     .then(result => {
+        userRepository.delete({id: request.body.userId})
+        .then(result => {
+            console.log("Celebrity user " + request.body.userId + " deleted");
+        })
+        .catch(error => {
+            console.log("Error deleting celebrity user: " + error);
+        })
         response.status(200).send(result);
     })
     .catch(error => {
@@ -285,8 +293,12 @@ if(!errors.isEmpty()){
 }
 
 let celebrityRepository = getRepository(Celebrity);
+let userRepository = getRepository(User);
 await celebrityRepository.softDelete({id: request.params.id})
     .then(result => {
+        userRepository.softDelete({id: request.body.userId})
+            .then(result => console.log("Celebrity user soft deleted successfully " + result))
+            .catch(error => console.log("Error soft deleting the celebrity user " + error))
         response.status(200).send(result);
     })
     .catch(error => {
