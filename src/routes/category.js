@@ -39,7 +39,7 @@ categoryRoutes.use('/api/category', Guard.loggedOnly);
 categoryRoutes.post('/api/category', upload.single('image'),  categoryController.create);
 categoryRoutes.get('/api/categories', categoryController.index);
 categoryRoutes.get('/api/category/:id', categoryValidator.validate('show'), categoryController.show);
-categoryRoutes.put('/api/category/:id', categoryValidator.validate('update'), categoryController.update);
+categoryRoutes.put('/api/category/:id', upload.single('image'), categoryValidator.validate('update'), categoryController.update);
 categoryRoutes.delete('/api/category/:id/delete', categoryValidator.validate('delete'), categoryController.del);
 categoryRoutes.delete('/api/category/:id', categoryValidator.validate('softDelete'), categoryController.softDelete);
 
