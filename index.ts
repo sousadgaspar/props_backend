@@ -45,9 +45,9 @@ app.use('/', subcategoryRoutes);
 import {libraryItemRoutes} from './src/routes/libraryItem';
 app.use('/', libraryItemRoutes);
 
-import {paymentGatewayRoutes} from './src/routes/paymentGateway';
+import {paymentGatewayRoutes} from './src/routes/paymentgateway';
 app.use('/', paymentGatewayRoutes);
 
 
 //Run server
-app.listen(7000, () => {console.log("listening on port 7000...")});
+app.listen(process.env.PORT, () => {console.log("listening on port " + process.env.PORT + '...')});
