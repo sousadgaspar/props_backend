@@ -1,5 +1,5 @@
 const celebrityController = require("../controllers/CelebrityController");
-const celebrityValidator = require('../controllers/validators/celebrityValidator');
+const celebrityValidator = require('../controllers/validators/CelebrityValidator');
 const celebrityRoutes = require('express').Router();
 const Guard = require('../controllers/middlewares/Guard');
 
