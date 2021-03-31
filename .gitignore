@@ -4,4 +4,7 @@ node_modules/
 build/
 tmp/
 temp/
-media/*
+media/app-icons/*
+media/categories/*
+media/user/photos/*
+package-lock.json

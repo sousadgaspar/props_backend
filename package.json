@@ -1,10 +1,13 @@
 {
-   "name": "propsy_backend",
+   "name": "props_backend",
    "version": "1.0.0",
-   "description": "this is the backend for the propsy app",
+   "description": "this is the backend for the props app",
    "main": "index.js",
    "author": "Waau LTD",
    "license": "ISC",
+   "engines": {
+      "node": "14.15.2"
+   },
    "dependencies": {
       "bcrypt": "^5.0.0",
       "bcryptjs": "^2.4.3",
