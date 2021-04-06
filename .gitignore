@@ -6,5 +6,5 @@ tmp/
 temp/
 media/app-icons/*
 media/categories/*
-media/user/photos/*
+media/user-photos/*
 package-lock.json

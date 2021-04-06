@@ -1,7 +1,5 @@
 import {Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import { Account } from "./Account";
-const moment = require('moment');
-let dueDate = moment().add(process.env.DUE_DATE_MESSAGE_PAYMENT, 'days').format('L');
 
 @Entity()
 export class Transaction {
@@ -35,9 +33,7 @@ export class Transaction {
     })
     EMISPaymentReferenceStatus: string;
 
-    @Column({
-        default: new Date(dueDate)
-    })
+    @Column()
     EMISPaymentRefenrenceDueDate: Date;
 
     @Column({
