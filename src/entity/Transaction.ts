@@ -36,7 +36,7 @@ export class Transaction {
     EMISPaymentReferenceStatus: string;
 
     @Column({
-        default: dueDate
+        default: new Date(dueDate)
     })
     EMISPaymentRefenrenceDueDate: Date;
 
