@@ -3,6 +3,9 @@ import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColu
 @Entity()
 export class PaymentGateway {
 
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+    
     @Column()
     name: string;
 
