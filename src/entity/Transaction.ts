@@ -1,7 +1,7 @@
 import {Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import { Account } from "./Account";
 const moment = require('moment');
-let dueDate = moment().add(3, 'days').format();
+let dueDate = moment().add(process.env.DUE_DATE_MESSAGE_PAYMENT, 'days').format('L');
 
 @Entity()
 export class Transaction {
