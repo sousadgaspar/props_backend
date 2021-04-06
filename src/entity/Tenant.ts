@@ -1,5 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BaseEntity, Double, OneToMany, JoinColumn, OneToOne} from "typeorm";
-
+import {PaymentGateway} from './PaymentGateway';
 @Entity()
 
 export class Tenant {
@@ -14,9 +14,9 @@ export class Tenant {
     description: string;
 
     @Column({})
-    paymentMethods: [];
+    currency: string;
 
     @Column({})
-    currency: string;
+    paymentGateways: string;
 
 }
