@@ -48,6 +48,10 @@ app.use('/', libraryItemRoutes);
 import {paymentGatewayRoutes} from './src/routes/paymentgateway';
 app.use('/', paymentGatewayRoutes);
 
+//bootstrap entities
+import {Bootstrap} from './src/bootstrap';
+(new Bootstrap()).registerTenant();
+
 
 //Run server
 app.listen(process.env.PORT, () => {console.log("listening on port " + process.env.PORT + '...')});
