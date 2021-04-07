@@ -34,4 +34,5 @@
    "scripts": {
       "start": "nodemon ./index.ts"
    }
+
 }

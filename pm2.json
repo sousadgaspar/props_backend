@@ -1,0 +1,21 @@
+{
+    "apps": [
+        {
+            "name": "api",
+            "exec_mode": "cluster",
+            "instances": "max",
+            "interpreter": "ts-node",
+            "script": "./index.ts",
+	    "env": {
+                "ENV": "prod",
+                "PORT": 7000,
+                "DB_USERNAME": "root",
+                "DB_PASSWORD": "root",
+                "DB_NAME": "propsy",
+                "DB_HOST": "68.183.213.14",
+                "DB_DIALECT": "mysql",
+                "DB_PORT": 3306
+            }
+        }
+    ]
+}
