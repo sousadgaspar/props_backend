@@ -1,9 +1,20 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 const path = require('path');
+import {Bootstrap} from './src/bootstrap';
 
+let connectionStablished = false;
 //set the database connection
-createConnection();
+createConnection()
+    .then(() => {
+        connectionStablished = true;
+        (new Bootstrap()).registerTenant();
+    })
+    .catch(error => {
+        connectionStablished = false;
+        console.log(":::::::::::::Connection was not established. Aborting system start:::::::::::::::::::::::")
+        console.log(error);
+    })
 
 //Setup the web server
 const express = require('express');
@@ -47,10 +58,6 @@ app.use('/', libraryItemRoutes);
 
 import {paymentGatewayRoutes} from './src/routes/paymentgateway';
 app.use('/', paymentGatewayRoutes);
-
-//bootstrap entities
-import {Bootstrap} from './src/bootstrap';
-(new Bootstrap()).registerTenant();
 
 
 //Run server
