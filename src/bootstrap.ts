@@ -14,11 +14,15 @@ export class Bootstrap {
         const tenantRepository = getRepository(Tenant);
         await tenantRepository.find({name: "international"})
             .then(async foundTenant => {
-                if(!foundTenant) {
+                if(foundTenant.length == 0) {
+                    console.log(":::::::::Found tenant:::::::::::::")
+                    console.log(foundTenant);
+
                     await tenantRepository.save(defaultTenant)
                     .then(savedTenant => console.log(savedTenant))
                     .catch(error => console.log(error));
                 }
+                console.log("Found Tenant: " + JSON.stringify(foundTenant));
             }) 
     }
 }
