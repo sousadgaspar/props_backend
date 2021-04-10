@@ -2,6 +2,7 @@ import {Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Dele
 import { RelationCountMetadata } from "typeorm/metadata/RelationCountMetadata";
 import {Account} from './Account';
 import {Message} from './Message';
+import {Tenant} from './Tenant';
 
 @Entity()
 export class User extends BaseEntity{
@@ -88,6 +89,10 @@ export class User extends BaseEntity{
     @OneToOne(() => Account, {eager: true, cascade: true})
     @JoinColumn()
     account: Account;
+
+    @OneToOne(() => Tenant, {eager: true})
+    @JoinColumn()
+    tenant: Tenant;
 
     @OneToMany(() => Message, message => message.user, {cascade: true})
     messages: Message[]
