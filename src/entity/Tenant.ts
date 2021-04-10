@@ -1,5 +1,6 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BaseEntity, Double, OneToMany, JoinColumn, OneToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BaseEntity, Double, OneToMany, JoinColumn, OneToOne} from "typeorm";
 import {PaymentGateway} from './PaymentGateway';
+import { User } from "./User";
 @Entity()
 
 export class Tenant {
@@ -18,5 +19,8 @@ export class Tenant {
 
     @Column({})
     paymentGateways: string;
+
+    @ManyToOne(() => User, user => user.tenants)
+    user: User[];
 
 }

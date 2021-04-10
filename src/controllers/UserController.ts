@@ -3,6 +3,7 @@ import {Request, Response} from 'express';
 import {validationResult} from 'express-validator';
 import {User} from '../entity/User';
 import {Account} from '../entity/Account';
+import {Tenant} from '../entity/Tenant';
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotEnv = require('dotenv');
@@ -100,6 +101,23 @@ export async function create(request: Request, response: Response) {
         await getManager().transaction(async transactionEntityManager => {
             //create a new account for the user
             user.account = new Account;
+
+            //load tenant conditionaly
+            if(request.body.tenantId) {
+                //load tenant if passed in request
+                const tenantRepository = getRepository(Tenant);
+                await tenantRepository.findOne({id: request.body.tenantId})
+                    .then(foundTenant => {
+                        user.tenant = foundTenant;
+                    })
+            } else {
+                //load the default tenant
+                const tenantRepository = getRepository(Tenant);
+                await tenantRepository.findOne({name: "international"})
+                    .then(foundTenant => {
+                        user.tenant = foundTenant;
+                    })
+            }
 
             //save the user
             await transactionEntityManager.save(user)

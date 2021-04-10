@@ -90,9 +90,9 @@ export class User extends BaseEntity{
     @JoinColumn()
     account: Account;
 
-    @OneToOne(() => Tenant, {eager: true})
+    @OneToMany(() => Tenant, tenant => tenant.user)
     @JoinColumn()
-    tenant: Tenant;
+    tenants: Tenant[];
 
     @OneToMany(() => Message, message => message.user, {cascade: true})
     messages: Message[]
