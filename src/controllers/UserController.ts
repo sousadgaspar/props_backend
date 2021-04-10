@@ -108,14 +108,14 @@ export async function create(request: Request, response: Response) {
                 const tenantRepository = getRepository(Tenant);
                 await tenantRepository.findOne({id: request.body.tenantId})
                     .then(foundTenant => {
-                        user.tenants.push(foundTenant);
+                        user.tenants = [foundTenant];
                     })
             } else {
                 //load the default tenant
                 const tenantRepository = getRepository(Tenant);
                 await tenantRepository.findOne({name: "international"})
                     .then(foundTenant => {
-                        user.tenants.push(foundTenant);
+                        user.tenants  = [foundTenant];
                     })
             }
 
