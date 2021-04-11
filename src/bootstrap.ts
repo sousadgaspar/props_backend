@@ -12,17 +12,21 @@ export class Bootstrap {
         defaultTenant.paymentGateways = process.env.TENANT_DEFAULT_PAYMENT_METHOD;
 
         const tenantRepository = getRepository(Tenant);
-        await tenantRepository.find({name: "international"})
+        await tenantRepository.find()
             .then(async foundTenant => {
                 if(foundTenant.length == 0) {
-                    console.log(":::::::::Found tenant:::::::::::::")
-                    console.log(foundTenant);
+                    console.log(":::::::::  NO TENANT FOUND ::::::::::::: " + JSON.stringify(foundTenant));
 
                     await tenantRepository.save(defaultTenant)
-                    .then(savedTenant => console.log(savedTenant))
-                    .catch(error => console.log(error));
+                    .then(savedTenant => {
+                        console.log(":::::::::  NEWLLY CREATED TENANT ::::::::::::: " + JSON.stringify(savedTenant));
+                    })
+                    .catch(error => {
+                        console.log(":::::::::  ERROR CREATING TENANT ::::::::::::: " + JSON.stringify(error));
+                    });
+                } else {
+                    console.log(":::::::::  FOUND " + foundTenant.length + " TENANTS ::::::::::::: " + JSON.stringify(foundTenant));
                 }
-                console.log("Found Tenant: " + JSON.stringify(foundTenant));
             }) 
     }
 }
