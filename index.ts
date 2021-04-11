@@ -59,6 +59,9 @@ app.use('/', libraryItemRoutes);
 import {paymentGatewayRoutes} from './src/routes/paymentgateway';
 app.use('/', paymentGatewayRoutes);
 
+import {tenantRoutes} from './src/routes/tenant';
+app.use('/', tenantRoutes);
+
 
 //Run server
 app.listen(process.env.PORT, () => {console.log("listening on port " + process.env.PORT + '...')});
