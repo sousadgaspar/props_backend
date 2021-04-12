@@ -90,7 +90,7 @@ export class User extends BaseEntity{
     @JoinColumn()
     account: Account;
 
-    @OneToMany(() => Tenant, tenant => tenant.user)
+    @OneToMany(() => Tenant, tenant => tenant.user, {eager: true})
     @JoinColumn()
     tenants: Tenant[];
 
