@@ -5,6 +5,7 @@ import {Category} from '../entity/Category';
 import { validationResult } from 'express-validator';
 import { Subcategory } from '../entity/Subcategory';
 import { User } from '../entity/User';
+import { Tenant } from '../entity/Tenant';
 const bcrypt = require('bcrypt');
 
 /*
@@ -37,6 +38,13 @@ export async function create(request: Request, response: Response) {
     celebrity.user.description = request.body.description;
     celebrity.user.email = request.body.email;
     celebrity.user.password = request.body.password;
+
+    //add tenant to the user celebrity
+    const tenantRepository = getRepository(Tenant);
+    (request.body.tenantId)?
+        user.tenant = await tenantRepository.findOne({id: request.body.tenantId}) :
+        user.tenant = await tenantRepository.findOne({name: "international"});
+
     //hash the password
     const salt = await bcrypt.genSalt(10);
     if(request.body.password) {
@@ -44,7 +52,6 @@ export async function create(request: Request, response: Response) {
         celebrity.user.password = hashedPassword;
     }
     celebrity.messagePrice = request.body.messagePrice;
-    celebrity.messagePriceCurrency = request.body.messagePriceCurrency;
     celebrity.messageResponseTime = request.body.messageResponseTime;
     celebrity.user.telephoneNumber = request.body.telephoneNumber;
     celebrity.user.isCelebrity = true;
@@ -215,7 +222,6 @@ await celebrityRepository.findOne({id: request.params.id})
         foundCelebrity.user.description = request.body.description;
         foundCelebrity.messageResponseTime = request.body.messageResponseTime;
         foundCelebrity.messagePrice = request.body.messagePrice;
-        foundCelebrity.messagePriceCurrency = request.body.messagePriceCurrency;
     
         await celebrityRepository.save(foundCelebrity)
             .then(savedCelebrity => {
@@ -245,34 +251,48 @@ await celebrityRepository.findOne({id: request.params.id})
 */
 export async function  del(request: Request, response: Response) {
 
-//validate the request
-const errors = validationResult(request);
-if(!errors.isEmpty()){
-    return response.status(400).json({errors: errors.array()})
-}
+    //validate the request
+    const errors = validationResult(request);
+    if(!errors.isEmpty()){
+        return response.status(400).json({errors: errors.array()})
+    }
 
-let celebrityRepository = getRepository(Celebrity);
-let userRepository = getRepository(User);
-await celebrityRepository.delete({id: request.params.id})
-    .then(result => {
-        userRepository.delete({id: request.body.userId})
+    let celebrityRepository = getRepository(Celebrity);
+    let userRepository = getRepository(User);
+    const foundCelebrity = await celebrityRepository.findOne({id: request.params.id});
+    const userId = foundCelebrity.user.id;
+
+    await celebrityRepository.delete({id: request.params.id})
         .then(result => {
-            console.log("Celebrity user " + request.body.userId + " deleted");
+            console.log(`::::::::::::::::; Celebrity ${request.params.id} Deleted successfuly::::::::::::::::::::::`);
+            console.log(result);
         })
         .catch(error => {
-            console.log("Error deleting celebrity user: " + error);
+            console.log(`::::::::::::::::; Error Deleting Celebrity ${request.params.id} ::::::::::::::::::::::`);
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            });
         })
-        response.status(200).send(result);
-    })
-    .catch(error => {
-        response.status(500).send({
-            errorName: error.name,
-            errorMessage: error.message,
-            errorNumber: error.errno,
-            errorCode: error.code,
-            sqlMessage: error.sqlMessage,
-        });
-    })
+    
+    await userRepository.delete({id: userId})
+        .then(result => {
+            console.log(`::::::::::::::::; User ${userId} Deleted successfuly::::::::::::::::::::::`);
+            response.status(200).send(result);
+        })
+        .catch(error => {
+            console.log(`::::::::::::::::; Error Deleting user ${userId} ::::::::::::::::::::::`);
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            });
+        })
 }
 
 

@@ -102,20 +102,12 @@ export async function create(request: Request, response: Response) {
             //create a new account for the user
             user.account = new Account;
 
-            //load tenant conditionaly
-            if(request.body.tenantId) {
-                //load tenant if passed in request
-                const tenantRepository = getRepository(Tenant);
-                await tenantRepository.findOne({id: request.body.tenantId})
-                    .then(foundTenant => {
-                        user.tenants = [foundTenant];
-                    })
-            } else {
-                //load the default tenant
-                const tenantRepository = getRepository(Tenant);
-                const foundTenant = await tenantRepository.findOne({name: "international"});
-                user.tenants  = [foundTenant];
-            }
+            //add tenant to the user celebrity
+            const tenantRepository = getRepository(Tenant);
+            (request.body.tenantId)?
+                user.tenant = await tenantRepository.findOne({id: request.body.tenantId}) :
+                user.tenant = await tenantRepository.findOne({name: "international"});
+
 
             //save the user
             await transactionEntityManager.save(user)

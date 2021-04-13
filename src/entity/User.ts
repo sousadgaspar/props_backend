@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Column, BaseEntity, OneToOne, JoinColumn, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Column, BaseEntity, OneToOne, JoinColumn, OneToMany, ManyToOne} from "typeorm";
 import { RelationCountMetadata } from "typeorm/metadata/RelationCountMetadata";
 import {Account} from './Account';
 import {Message} from './Message';
@@ -90,9 +90,9 @@ export class User extends BaseEntity{
     @JoinColumn()
     account: Account;
 
-    @OneToMany(() => Tenant, tenant => tenant.user, {eager: true})
+    @ManyToOne(() => Tenant, tenant => tenant.users, {eager: true})
     @JoinColumn()
-    tenants: Tenant[];
+    tenant: Tenant;
 
     @OneToMany(() => Message, message => message.user, {cascade: true})
     messages: Message[]
