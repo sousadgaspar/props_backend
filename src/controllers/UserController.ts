@@ -334,6 +334,7 @@ export async function softDelete(request: Request, response: Response) {
 export async function messages(request: Request, response: Response) {
     const messages = await getRepository(Message)
         .createQueryBuilder("messages")
+        .where("messages.userId = :id", {id: request.params.id})
         .getMany()
         .then(messages => {
             console.log("::::::::::::: RETURNED MESSAGES ::::::::::::::::::");
