@@ -28,11 +28,6 @@ export class Celebrity extends BaseEntity {
     messagePrice: number;
 
     @Column({
-        default: 'kz'
-    })
-    messagePriceCurrency: string;
-
-    @Column({
         nullable: true
     })
     facebookProfile: string;

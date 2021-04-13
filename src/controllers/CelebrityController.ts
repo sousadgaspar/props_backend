@@ -5,6 +5,7 @@ import {Category} from '../entity/Category';
 import { validationResult } from 'express-validator';
 import { Subcategory } from '../entity/Subcategory';
 import { User } from '../entity/User';
+import { Tenant } from '../entity/Tenant';
 const bcrypt = require('bcrypt');
 
 /*
@@ -37,6 +38,25 @@ export async function create(request: Request, response: Response) {
     celebrity.user.description = request.body.description;
     celebrity.user.email = request.body.email;
     celebrity.user.password = request.body.password;
+
+    //add tenant to the user celebrity
+    //load tenant conditionaly
+    if(request.body.tenantId) {
+        //load tenant if passed in request
+        const tenantRepository = getRepository(Tenant);
+        await tenantRepository.findOne({id: request.body.tenantId})
+            .then(foundTenant => {
+                user.tenants = [foundTenant];
+            })
+    } else {
+        //load the default tenant
+        const tenantRepository = getRepository(Tenant);
+        await tenantRepository.findOne({name: "international"})
+            .then(foundTenant => {
+                user.tenants  = [foundTenant];
+            })
+    }
+    
     //hash the password
     const salt = await bcrypt.genSalt(10);
     if(request.body.password) {
@@ -44,7 +64,6 @@ export async function create(request: Request, response: Response) {
         celebrity.user.password = hashedPassword;
     }
     celebrity.messagePrice = request.body.messagePrice;
-    celebrity.messagePriceCurrency = request.body.messagePriceCurrency;
     celebrity.messageResponseTime = request.body.messageResponseTime;
     celebrity.user.telephoneNumber = request.body.telephoneNumber;
     celebrity.user.isCelebrity = true;
@@ -215,7 +234,6 @@ await celebrityRepository.findOne({id: request.params.id})
         foundCelebrity.user.description = request.body.description;
         foundCelebrity.messageResponseTime = request.body.messageResponseTime;
         foundCelebrity.messagePrice = request.body.messagePrice;
-        foundCelebrity.messagePriceCurrency = request.body.messagePriceCurrency;
     
         await celebrityRepository.save(foundCelebrity)
             .then(savedCelebrity => {

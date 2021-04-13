@@ -26,6 +26,11 @@ export class Message extends BaseEntity {
     price: number;
 
     @Column({
+        default: "$"
+    })
+    currency: string;
+
+    @Column({
         default: 'pending'
     })
     status: string;

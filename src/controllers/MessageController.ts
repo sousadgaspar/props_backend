@@ -7,6 +7,7 @@ import {Ocasion} from '../entity/Ocasion';
 import { validationResult } from 'express-validator';
 import {Transaction} from '../entity/Transaction';
 import {Account} from '../entity/Account';
+import { Tenant } from '../entity/Tenant';
 
 
 /*
@@ -46,21 +47,11 @@ export async function create(request: Request, response: Response) {
         });
     message.user = foundUser;
 
-    let foundCelebrity = Object();
-    await celebrityRepository.findOne({id: request.body.celebrityId})
-        .then(celebrity => {
-            foundCelebrity = celebrity;
-            message.price = foundCelebrity.messagePrice;
-        })
-        .catch(error => {
-            response.status(500).send({
-                errorName: error.name,
-                errorMessage: error.message,
-                errorNumber: error.errno,
-                errorCode: error.code,
-                sqlMessage: error.sqlMessage,
-            })
-        });
+    const foundCelebrity = await celebrityRepository.findOne({id: request.body.celebrityId});
+    if(foundCelebrity.createdAt == undefined) response.status(404).send({error: true, message: "celebrity not found during message creation"})
+
+    message.price = foundCelebrity.messagePrice;
+    message.currency = foundCelebrity.user.tenants[0].currency;
     message.celebrity = foundCelebrity;
 
     let foundOcasion = Object();
@@ -212,26 +203,29 @@ export async function update(request: Request, response: Response) {
                 })
             }
 
-            foundMessage.from = request.body.from;
-            foundMessage.to = request.body.to;
-            foundMessage.status = request.body.status;
-            foundMessage.instructions = request.body.instructions;
-            foundMessage.video = request.body.video;
+            if(request.body.from) foundMessage.from = request.body.from;
+            if(request.body.to) foundMessage.to = request.body.to;
+            if(request.body.status) foundMessage.status = request.body.status;
+            if(request.body.instructions) foundMessage.instructions = request.body.instructions;
+            if(request.body.video) foundMessage.video = request.body.video;
+            if(request.body.currency) foundMessage.currency = request.body.video;
 
             let foundOcasion = Object();
-            await ocasionRepository.findOne({id: request.body.ocasionId})
-                .then(ocasion => foundOcasion = ocasion)
-                .catch(error => {
-                    response.status(500).send({
-                        errorName: error.name,
-                        errorMessage: error.message,
-                        errorNumber: error.errno,
-                        errorCode: error.code,
-                        sqlMessage: error.sqlMessage,
-                    })
-                });
-            foundMessage.ocasion = foundOcasion;
-            
+            if(request.body.ocasionId) {
+                await ocasionRepository.findOne({id: request.body.ocasionId})
+                    .then(ocasion => foundOcasion = ocasion)
+                    .catch(error => {
+                        response.status(500).send({
+                            errorName: error.name,
+                            errorMessage: error.message,
+                            errorNumber: error.errno,
+                            errorCode: error.code,
+                            sqlMessage: error.sqlMessage,
+                        })
+                    });
+                foundMessage.ocasion = foundOcasion;
+            }
+
             await messageRepository.save(foundMessage)
                 .then(savedMessage => {
                     response.status(200).send(savedMessage);
