@@ -265,7 +265,7 @@ export async function  del(request: Request, response: Response) {
     await celebrityRepository.delete({id: request.params.id})
         .then(result => {
             console.log(`::::::::::::::::; Celebrity ${request.params.id} Deleted successfuly::::::::::::::::::::::`);
-            response.status(200).send(result);
+            console.log(result);
         })
         .catch(error => {
             console.log(`::::::::::::::::; Error Deleting Celebrity ${request.params.id} ::::::::::::::::::::::`);
