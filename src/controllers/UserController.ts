@@ -4,6 +4,7 @@ import {validationResult} from 'express-validator';
 import {User} from '../entity/User';
 import {Account} from '../entity/Account';
 import {Tenant} from '../entity/Tenant';
+import { Message } from '../entity/Message';
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotEnv = require('dotenv');
@@ -309,6 +310,35 @@ export async function softDelete(request: Request, response: Response) {
     await userRepository.softDelete({id: request.params.id})
         .then(result => {
             return response.status(200).send(result);
+        })
+        .catch(error => {
+            return response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            });
+        })
+}
+
+
+/*
+*
+* messages: return all messages from Message Entity created by a user based on it ID
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
+export async function messages(request: Request, response: Response) {
+    const messages = await getRepository(Message)
+        .createQueryBuilder("messages")
+        .getMany()
+        .then(messages => {
+            console.log("::::::::::::: RETURNED MESSAGES ::::::::::::::::::");
+            console.log(messages);
+            response.status(200).send(messages)
         })
         .catch(error => {
             return response.status(500).send({
