@@ -24,7 +24,7 @@ export class Tenant {
     @Column({})
     paymentGateways: string;
 
-    @ManyToOne(() => User, user => user.tenants)
-    user: User[];
+    @OneToMany(() => User, user => user.tenant)
+    users: User[];
 
 }

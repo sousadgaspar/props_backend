@@ -40,23 +40,11 @@ export async function create(request: Request, response: Response) {
     celebrity.user.password = request.body.password;
 
     //add tenant to the user celebrity
-    //load tenant conditionaly
-    if(request.body.tenantId) {
-        //load tenant if passed in request
-        const tenantRepository = getRepository(Tenant);
-        await tenantRepository.findOne({id: request.body.tenantId})
-            .then(foundTenant => {
-                user.tenants = [foundTenant];
-            })
-    } else {
-        //load the default tenant
-        const tenantRepository = getRepository(Tenant);
-        await tenantRepository.findOne({name: "international"})
-            .then(foundTenant => {
-                user.tenants  = [foundTenant];
-            })
-    }
-    
+    const tenantRepository = getRepository(Tenant);
+    (request.body.tenantId)?
+        user.tenant = await tenantRepository.findOne({id: request.body.tenantId}) :
+        user.tenant = await tenantRepository.findOne({name: "international"});
+
     //hash the password
     const salt = await bcrypt.genSalt(10);
     if(request.body.password) {
@@ -263,34 +251,48 @@ await celebrityRepository.findOne({id: request.params.id})
 */
 export async function  del(request: Request, response: Response) {
 
-//validate the request
-const errors = validationResult(request);
-if(!errors.isEmpty()){
-    return response.status(400).json({errors: errors.array()})
-}
+    //validate the request
+    const errors = validationResult(request);
+    if(!errors.isEmpty()){
+        return response.status(400).json({errors: errors.array()})
+    }
 
-let celebrityRepository = getRepository(Celebrity);
-let userRepository = getRepository(User);
-await celebrityRepository.delete({id: request.params.id})
-    .then(result => {
-        userRepository.delete({id: request.body.userId})
+    let celebrityRepository = getRepository(Celebrity);
+    let userRepository = getRepository(User);
+    const foundCelebrity = await celebrityRepository.findOne({id: request.params.id});
+    const userId = foundCelebrity.user.id;
+
+    await celebrityRepository.delete({id: request.params.id})
         .then(result => {
-            console.log("Celebrity user " + request.body.userId + " deleted");
+            console.log(`::::::::::::::::; Celebrity ${request.params.id} Deleted successfuly::::::::::::::::::::::`);
+            response.status(200).send(result);
         })
         .catch(error => {
-            console.log("Error deleting celebrity user: " + error);
+            console.log(`::::::::::::::::; Error Deleting Celebrity ${request.params.id} ::::::::::::::::::::::`);
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            });
         })
-        response.status(200).send(result);
-    })
-    .catch(error => {
-        response.status(500).send({
-            errorName: error.name,
-            errorMessage: error.message,
-            errorNumber: error.errno,
-            errorCode: error.code,
-            sqlMessage: error.sqlMessage,
-        });
-    })
+    
+    await userRepository.delete({id: userId})
+        .then(result => {
+            console.log(`::::::::::::::::; User ${userId} Deleted successfuly::::::::::::::::::::::`);
+            response.status(200).send(result);
+        })
+        .catch(error => {
+            console.log(`::::::::::::::::; Error Deleting user ${userId} ::::::::::::::::::::::`);
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            });
+        })
 }
 
 

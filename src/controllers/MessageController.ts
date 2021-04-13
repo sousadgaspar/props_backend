@@ -51,7 +51,7 @@ export async function create(request: Request, response: Response) {
     if(foundCelebrity.createdAt == undefined) response.status(404).send({error: true, message: "celebrity not found during message creation"})
 
     message.price = foundCelebrity.messagePrice;
-    message.currency = foundCelebrity.user.tenants[0].currency;
+    message.currency = foundCelebrity.user.tenant.currency;
     message.celebrity = foundCelebrity;
 
     let foundOcasion = Object();
