@@ -5,6 +5,7 @@ import {User} from '../entity/User';
 import {Account} from '../entity/Account';
 import {Tenant} from '../entity/Tenant';
 import { Message } from '../entity/Message';
+import { Celebrity } from '../entity/Celebrity';
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotEnv = require('dotenv');
@@ -27,6 +28,10 @@ export async function login(request: Request, response: Response) {
 
     //check the user
     if(!user) return response.status(400).json({error: true, message: "user not found"});
+
+    //find celebrity in case it is one of them
+    const celebrityRepository = getRepository(Celebrity);
+    const celebrity = await celebrityRepository.findOne({where: [{user: user}]});
     
     //check the password
     const validated = await bcrypt.compare(request.body.password, user.password);
@@ -35,7 +40,7 @@ export async function login(request: Request, response: Response) {
     //create a new token
     const token = jwt.sign({_id: user.id}, process.env.API_PUBLIC_KEY, {expiresIn: '365d'});
 
-    return response.status(200).send({success: true, _id: user.id, user: user, token: token});
+    return response.status(200).send({success: true, _id: user.id, user: user, celebrity: celebrity, token: token});
 }
 
 

@@ -48,7 +48,7 @@ export async function create(request: Request, response: Response) {
     message.user = foundUser;
 
     const foundCelebrity = await celebrityRepository.findOne({id: request.body.celebrityId});
-    if(foundCelebrity.createdAt == undefined) response.status(404).send({error: true, message: "celebrity not found during message creation"})
+    if(foundCelebrity == undefined) response.status(404).send({error: true, message: "celebrity not found during message creation"})
 
     message.price = foundCelebrity.messagePrice;
     message.currency = foundCelebrity.user.tenant.currency;
