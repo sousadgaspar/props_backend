@@ -36,5 +36,8 @@ import { body, header, param } from 'express-validator';
         case 'softDelete': return [
             param('id', 'A referência do ID que passou não existe').isUUID(),
         ]; break;
+        case 'uploadVideoMessage': return [
+            param('id', 'A referência do ID que passou não existe').isUUID(), 
+        ]; break;
     }
 }

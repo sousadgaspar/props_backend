@@ -54,18 +54,9 @@ export async function create(request: Request, response: Response) {
     message.currency = foundCelebrity.user.tenant.currency;
     message.celebrity = foundCelebrity;
 
-    let foundOcasion = Object();
-    await ocasionRepository.findOne({id: request.body.ocasionId})
-        .then(ocasion => foundOcasion = ocasion)
-        .catch(error => {
-            response.status(500).send({
-                errorName: error.name,
-                errorMessage: error.message,
-                errorNumber: error.errno,
-                errorCode: error.code,
-                sqlMessage: error.sqlMessage,
-            })
-        });
+    let foundOcasion = await ocasionRepository.findOne({id: request.body.ocasionId});
+    if(foundOcasion == undefined) response.status(404).send({error: true, message: "ocasion not found during message creation"})
+
     message.ocasion = foundOcasion;
     message.from = request.body.from;
     message.to = request.body.to;
@@ -346,4 +337,50 @@ export async function changeStatus(request: Request, response: Response) {
                     });  
                 })
         })
+}
+
+
+
+/*
+*
+* uploadVideoMessage: upload the video message in the server and update the video name based on register id
+* @params> 
+*   request: Http Request object
+*   response: Http Response object
+*
+*/
+
+export async function uploadVideoMessage(request: Request, response: Response) {
+    //Validate the request
+    const errors = validationResult(request);
+    if(!errors.isEmpty()){
+        return response.status(400).json({errors: errors});
+    }
+
+    //get the message repository
+    const messageRepository = getRepository(Message);
+    const foundMessage = await messageRepository.findOne({id: request.params.id});
+    
+    if(foundMessage == undefined) return {success: false, message: "message not found. Please check the id on the params"}
+
+    foundMessage.video = request.body.video;
+    foundMessage.status = 'ready';
+
+    await messageRepository.save(foundMessage)
+        .then(savedMessage => {
+            console.log(":::::::::::::: SAVING MESSAGE :::::::::::::::::::");
+            console.log(savedMessage);
+
+            return response.status(200).send(savedMessage);
+        })
+        .catch(error => {
+            response.status(500).send({
+                errorName: error.name,
+                errorMessage: error.message,
+                errorNumber: error.errno,
+                errorCode: error.code,
+                sqlMessage: error.sqlMessage,
+            });  
+        })
+
 }

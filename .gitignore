@@ -7,4 +7,5 @@ temp/
 media/app-icons/*
 media/categories/*
 media/user-photos/*
+media/video-messages/*
 package-lock.json
