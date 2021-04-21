@@ -363,13 +363,13 @@ export async function uploadVideoMessage(request: Request, response: Response) {
     
     if(foundMessage == undefined) return {success: false, message: "message not found. Please check the id on the params"}
 
-    foundMessage.video = request.body.video;
-    foundMessage.status = 'ready';
+    foundMessage.video = request.file.originalname;
+    foundMessage.status = process.env.MESSAGE_STATUS_READY;
 
     await messageRepository.save(foundMessage)
         .then(savedMessage => {
             console.log(":::::::::::::: SAVING MESSAGE :::::::::::::::::::");
-            console.log(savedMessage);
+            console.log(JSON.stringify(savedMessage));
 
             return response.status(200).send(savedMessage);
         })

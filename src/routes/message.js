@@ -15,13 +15,17 @@ const storage = multer.diskStorage({
 
 
 const fileFilter = (request, file, cb) => {
-    if(file.mimetype == 'image/jpg' || 
-       file.mimetype == 'image/jpeg' || 
-       file.mimetype == 'image/png') {
+    if(file.mimetype == 'video/mp4' || 
+       file.mimetype == 'application/x-mpegURL' || 
+       file.mimetype == 'video/MP2T' || 
+       file.mimetype == 'video/3gpp' || 
+       file.mimetype == 'video/quicktime' || 
+       file.mimetype == 'video/x-ms-wmv' || 
+       file.mimetype == 'video/x-msvideo') {
 
         cb(null, true);
        } else {
-           cb({error: true, message: "The uploaded image aren't in the right format. Use jpeg, jpg or png"}, false);
+           cb({error: true, message: "The uploaded video isn't in the right format. Use .mp4, .avi, .mov or wmv"}, false);
        }
 }
 
