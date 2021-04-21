@@ -62,6 +62,7 @@ export async function create(request: Request, response: Response) {
     message.to = request.body.to;
     message.instructions = request.body.instructions;
     message.isPublic = request.body.isPublic;
+    message.status = process.env.MESSAGE_STATUS_EXPIRED_PENDING_PAYMENT;
 
     await messageRepository.save(message)
         .then(savedMessage => {
