@@ -21,6 +21,11 @@ export class Celebrity extends BaseEntity {
     })
     messageResponseTime: number;
 
+    @Column({
+        default: true
+    })
+    isAvailable: boolean;
+
     @OneToMany(() => Message, message => message.celebrity, {eager: true})
     messages: Message[];
 
