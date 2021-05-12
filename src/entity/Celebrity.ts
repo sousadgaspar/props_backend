@@ -26,6 +26,11 @@ export class Celebrity extends BaseEntity {
     })
     isAvailable: boolean;
 
+    @Column({
+        default: false
+    })
+    isVerified: boolean;
+
     @OneToMany(() => Message, message => message.celebrity, {eager: true})
     messages: Message[];
 
